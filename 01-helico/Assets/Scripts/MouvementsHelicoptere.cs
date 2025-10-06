@@ -2,7 +2,6 @@ using System;
 using Random = UnityEngine.Random;
 
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
@@ -134,7 +133,7 @@ public class MouvementsHelicoptere : MonoBehaviour
         }
     }
 
-    void KaboomHelicoptere()
+    public void KaboomHelicoptere()
     {
         // activer particules explosion
         explosion.SetActive(true);
@@ -167,18 +166,5 @@ public class MouvementsHelicoptere : MonoBehaviour
     {
         Scene sceneActuelle = SceneManager.GetActiveScene();
         SceneManager.LoadScene(sceneActuelle.name);
-    }
-
-    void ClignotementTextAlerte()
-    {
-        Debug.Log("clignote");
-        if (messageAlerteCouleur.a == 0)
-        {
-            messageAlerteCouleur = new Color(1, 0, 0, 1);
-        }
-        else
-        {
-            messageAlerteCouleur = new Color(1, 0, 0, 0);
-        }
     }
 }
