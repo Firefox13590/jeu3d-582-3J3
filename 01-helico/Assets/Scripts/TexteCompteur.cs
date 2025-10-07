@@ -30,10 +30,10 @@ public class TexteCompteur : MonoBehaviour
     /// </summary>
     void Compteur()
     {
-        Debug.Log(compteur);
+        //Debug.Log(compteur);
         compteur--;
         texteCompteur.text = compteur.ToString();
-        Debug.Log(texteCompteur.text);
+        //Debug.Log(texteCompteur.text);
 
         if (compteur <= 0)
         {
