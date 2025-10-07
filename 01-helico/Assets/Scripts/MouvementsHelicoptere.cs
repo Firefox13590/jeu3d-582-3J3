@@ -131,6 +131,10 @@ public class MouvementsHelicoptere : MonoBehaviour
         {
             KaboomHelicoptere();
         }
+        if (collidedObject.gameObject.tag == "dome")
+        {
+            KaboomHelicoptere();
+        }
     }
 
     public void KaboomHelicoptere()
