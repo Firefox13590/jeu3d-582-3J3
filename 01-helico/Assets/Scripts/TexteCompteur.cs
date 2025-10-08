@@ -4,7 +4,7 @@ using UnityEngine;
 public class TexteCompteur : MonoBehaviour
 {
     public MouvementsHelicoptere scriptHelico;
-    public int compteur = 120;
+    public int compteur = 150;
     TextMeshProUGUI texteCompteur;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

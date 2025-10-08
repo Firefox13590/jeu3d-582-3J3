@@ -13,14 +13,11 @@ public class MouvementsHelicoptere : MonoBehaviour
     essenceActuelle, essenceMax = 100;
     float forceHorizontale, forceAvant;
     bool enMarche, volumeGlobalSourdine;
-    public GameObject helice;
+    public GameObject helice, explosion, messageAlerteEssence;
     Rigidbody rbHelico;
     AudioSource audioHelico;
-    public AudioClip sonBidon;
-    public AudioClip sonExplosion;
-    public GameObject explosion;
+    public AudioClip sonBidon, sonExplosion;
     public Image barreEssence;
-    public GameObject messageAlerteEssence;
     Color messageAlerteCouleur;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -131,7 +128,7 @@ public class MouvementsHelicoptere : MonoBehaviour
         {
             KaboomHelicoptere();
         }
-        if (collidedObject.gameObject.tag == "dome")
+        if (collidedObject.gameObject.tag == "dome" || collidedObject.gameObject.tag == "drone")
         {
             KaboomHelicoptere();
         }
