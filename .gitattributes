@@ -123,3 +123,4 @@
 *.rar lfs-file
 *.tar lfs-file
 *.dylib filter=lfs diff=lfs merge=lfs -text
+*.ai filter=lfs diff=lfs merge=lfs -text
