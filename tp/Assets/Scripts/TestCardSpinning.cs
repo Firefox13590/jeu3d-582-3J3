@@ -7,20 +7,23 @@ public class TestCardSpinning : MonoBehaviour
     [Range(0.1f, 10)]
     public float vitesseRotationBase = 1;
 
-    RectTransform[] rtransCards;
+    RectTransform[] rtrCardList;
     float[] vitessesRotationRandom;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rtransCards = cardList.GetComponentsInChildren<RectTransform>();
+        // recuperer liste cartes (avec parent empty)
+        rtrCardList = cardList.GetComponentsInChildren<RectTransform>();
         //List<RectTransform> temp = rtransCards.ToList();
-        rtransCards = rtransCards.Skip(1).ToArray();
-        Debug.Log("nb cartes: " + rtransCards.Length);
+        // enlever premier element (parent empty)
+        rtrCardList = rtrCardList.Skip(1).ToArray();
+        Debug.Log("nb cartes: " + rtrCardList.Length);
 
-        vitessesRotationRandom = new float[rtransCards.Length];
-        for(int i = 0; i < rtransCards.Length; i++)
+        // liste vitesses random rotation pour cartes
+        vitessesRotationRandom = new float[rtrCardList.Length];
+        for(int i = 0; i < rtrCardList.Length; i++)
         {
-            Debug.Log(rtransCards[i]);
+            Debug.Log(rtrCardList[i]);
             vitessesRotationRandom[i] = Random.Range(-vitesseRotationBase, vitesseRotationBase);
         }
     }
@@ -28,9 +31,9 @@ public class TestCardSpinning : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for(int i = 0; i < rtransCards.Length; i++)
+        for(int i = 0; i < rtrCardList.Length; i++)
         {
-            rtransCards[i].Rotate(0, vitessesRotationRandom[i], 0);
+            rtrCardList[i].Rotate(0, vitessesRotationRandom[i], 0);
         }
     }
 }
