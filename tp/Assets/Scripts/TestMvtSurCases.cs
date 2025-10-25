@@ -1,15 +1,16 @@
 using System.Linq;
-using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TestMvtSurCases : MonoBehaviour
 {
-    public GameObject caseList, player;
-    public int caseIncrease = 5;
-    public float vitesseMvtJoueur = 1;
+    public GameObject caseList;
+    public int caseIncrease = 3;
+    public float tempsMvtJoueur = 1;
 
     Transform[] trCaseList;
     int currentPos = 0;
+    TestPlayerMoveTowards mvtScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -18,7 +19,8 @@ public class TestMvtSurCases : MonoBehaviour
         // enlever premier element (parent empty)
         trCaseList = trCaseList.Skip(1).ToArray();
         Debug.Log("nb cases: " + trCaseList.Length);
-        player.transform.position = trCaseList[currentPos].position;
+        transform.position = trCaseList[currentPos].position;
+        mvtScript = GetComponent<TestPlayerMoveTowards>();
     }
 
     // Update is called once per frame
@@ -39,23 +41,21 @@ public class TestMvtSurCases : MonoBehaviour
     int CalculAvanceCase(int currentPos, int movesLeft, Transform[] trCaseList)
     {
         Debug.Log($"debut pre-check loop: {currentPos}\nmoves left: {movesLeft}");
-        int maxPos = trCaseList.Length - 1;
-
-        //if (destPos > lastPos)
-        //{
-        //    destPos -= lastPos;
-        //}
+        int nextPos, maxPos = trCaseList.Length - 1;
+        //mvtScript.startPos = trCaseList[CheckForResetLoop(currentPos, maxPos)].position;
 
         while (movesLeft > 0)
         {
             currentPos = CheckForResetLoop(currentPos, maxPos);
-            int nextPos = currentPos + 1;
+            nextPos = currentPos + 1;
             nextPos = CheckForResetLoop(nextPos, maxPos/*, comparaison: 'g'*/);
             Debug.Log($"pos 1 index:{currentPos}\npos 2 index:{nextPos}");
-            MovePlayer(trCaseList[currentPos].position, trCaseList[nextPos].position);
+            MovePlayer(trCaseList[currentPos].position, trCaseList[nextPos].position, tempsMvtJoueur);
             currentPos++;
             movesLeft--;
         }
+
+        //mvtScript.enabled = true;
 
         return currentPos;
     }
@@ -84,8 +84,40 @@ public class TestMvtSurCases : MonoBehaviour
         return value;
     }
 
-    void MovePlayer(Vector3 startPos, Vector3 endPos)
+    void MovePlayer(Vector3 startPos, Vector3 endPos, float elapsedTime = 1, int frames = 30)
     {
-        player.transform.position = endPos;
+        //Debug.Log(startPos.magnitude);
+        //Debug.Log(startPos.sqrMagnitude);
+        //transform.position = endPos;
+
+        float distance = Vector3.Distance(startPos, endPos);
+        //float cooldown = elapsedTime / frames;
+        //float oneFrameDistance = distance * cooldown;
+        float oneFrameDistance = distance / (elapsedTime * frames);
+        Debug.Log("distance: " + distance);
+        //Debug.Log("cooldown: " + cooldown);
+        Debug.Log("oneframeDistance: " + oneFrameDistance);
+        //Debug.Log("deltaTime: " + Time.deltaTime);
+        //while(distance > 0)
+        //{
+        //    //cooldown -= Time.deltaTime;
+        //    while (cooldown > 0)
+        //    {
+        //        cooldown -= Time.deltaTime;
+        //        Debug.Log(cooldown);
+        //    }
+        //    //transform.position = startPos = Vector3.MoveTowards(player.transform.position, endPos, vitesseMvtJoueur * Time.deltaTime);
+        //    transform.position = startPos = Vector3.MoveTowards(startPos, endPos, oneFrameDistance);
+        //    distance = Vector3.Distance(startPos, endPos);
+        //    cooldown = elapsedTime / frames;
+        //    //Debug.Log(distance);
+        //}
+
+        mvtScript.startPos = startPos;
+        mvtScript.endPos = endPos;
+        //mvtScript.ListEndPos = mvtScript.ListEndPos.Append(endPos).ToArray();
+        //mvtScript.step = vitesseMvtJoueur * Time.deltaTime;
+        mvtScript.step = oneFrameDistance;
+        mvtScript.enabled = true;
     }
 }
