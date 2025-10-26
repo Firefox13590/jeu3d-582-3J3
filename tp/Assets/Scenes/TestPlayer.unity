@@ -1125,8 +1125,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestMvtSurCases
   caseList: {fileID: 888761579}
-  caseIncrease: 1
+  caseIncrease: 5
   tempsMvtJoueur: 2
+  allowInput: 1
 --- !u!114 &1003191116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1153,7 +1154,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1405008289}
   - component: {fileID: 1405008288}
-  - component: {fileID: 1405008291}
   m_Layer: 0
   m_Name: EmptyScriptTests
   m_TagString: Untagged
@@ -1189,21 +1189,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1405008291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405008287}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b8a9fd47b1e16846b6f483fddb112a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestMvtSurCases
-  caseList: {fileID: 888761579}
-  caseIncrease: 1
-  tempsMvtJoueur: 1
 --- !u!1 &1518767599
 GameObject:
   m_ObjectHideFlags: 0

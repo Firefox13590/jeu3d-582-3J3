@@ -1,5 +1,4 @@
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TestMvtSurCases : MonoBehaviour
@@ -10,25 +9,28 @@ public class TestMvtSurCases : MonoBehaviour
 
     Transform[] trCaseList;
     int currentPos = 0;
-    TestPlayerMoveTowards mvtScript;
+    TestPlayerMoveTowards frontendScript;
+    public bool allowInput = true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         // recuperer liste case (avec parent empty)
         trCaseList = caseList.GetComponentsInChildren<Transform>();
-        // enlever premier element (parent empty)
-        trCaseList = trCaseList.Skip(1).ToArray();
+        // enlever premier element (parent empty) avec spread operator
+        // change valeurs du array pour commencer a l'index 1 (seulement les cases)
+        trCaseList = trCaseList[1..];
         Debug.Log("nb cases: " + trCaseList.Length);
         transform.position = trCaseList[currentPos].position;
-        mvtScript = GetComponent<TestPlayerMoveTowards>();
+        frontendScript = GetComponent<TestPlayerMoveTowards>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && allowInput)
         {
             currentPos = CalculAvanceCase(currentPos, caseIncrease, trCaseList);
+            allowInput = false;
         }
     }
 
@@ -42,7 +44,7 @@ public class TestMvtSurCases : MonoBehaviour
     {
         Debug.Log($"debut pre-check loop: {currentPos}\nmoves left: {movesLeft}");
         int nextPos, maxPos = trCaseList.Length - 1;
-        //mvtScript.startPos = trCaseList[CheckForResetLoop(currentPos, maxPos)].position;
+        frontendScript.startPos = trCaseList[CheckForResetLoop(currentPos, maxPos)].position;
 
         while (movesLeft > 0)
         {
@@ -55,7 +57,7 @@ public class TestMvtSurCases : MonoBehaviour
             movesLeft--;
         }
 
-        //mvtScript.enabled = true;
+        frontendScript.enabled = true;
 
         return currentPos;
     }
@@ -113,11 +115,11 @@ public class TestMvtSurCases : MonoBehaviour
         //    //Debug.Log(distance);
         //}
 
-        mvtScript.startPos = startPos;
-        mvtScript.endPos = endPos;
-        //mvtScript.ListEndPos = mvtScript.ListEndPos.Append(endPos).ToArray();
+        //mvtScript.startPos = startPos;
+        //mvtScript.endPos = endPos;
+        frontendScript.ListEndPos = frontendScript.ListEndPos.Append(endPos).ToArray();
         //mvtScript.step = vitesseMvtJoueur * Time.deltaTime;
-        mvtScript.step = oneFrameDistance;
-        mvtScript.enabled = true;
+        frontendScript.step = oneFrameDistance;
+        //mvtScript.enabled = true;
     }
 }
