@@ -1,4 +1,4 @@
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TestCardSpinning : MonoBehaviour
@@ -9,6 +9,7 @@ public class TestCardSpinning : MonoBehaviour
 
     RectTransform[] rtrCardList;
     float[] vitessesRotationRandom;
+    TestGlowOnHover glowScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,16 +17,20 @@ public class TestCardSpinning : MonoBehaviour
         rtrCardList = cardList.GetComponentsInChildren<RectTransform>();
         //List<RectTransform> temp = rtransCards.ToList();
         // enlever premier element (parent empty)
-        rtrCardList = rtrCardList.Skip(1).ToArray();
+        rtrCardList = rtrCardList[1..];
         Debug.Log("nb cartes: " + rtrCardList.Length);
 
         // liste vitesses random rotation pour cartes
         vitessesRotationRandom = new float[rtrCardList.Length];
         for(int i = 0; i < rtrCardList.Length; i++)
         {
-            Debug.Log(rtrCardList[i]);
+            //Debug.Log(rtrCardList[i]);
             vitessesRotationRandom[i] = Random.Range(-vitesseRotationBase, vitesseRotationBase);
         }
+
+        //glowScript = GetComponent<TestGlowOnHover>();
+        //glowScript.rtrCardList = rtrCardList;
+        //glowScript.enabled = true;
     }
 
     // Update is called once per frame
