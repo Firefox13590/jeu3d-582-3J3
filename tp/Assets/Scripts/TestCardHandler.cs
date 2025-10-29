@@ -43,11 +43,17 @@ public class TestCardHandler : MonoBehaviour
         rtrCartes = new List<RectTransform>(parentListeCarte.GetComponentsInChildren<RectTransform>()[1..]);
         for(int i = 0; i < rtrCartes.Count; i++)
         {
-            Debug.Log(rtrCartes[i].name);
+            //Debug.Log(rtrCartes[i].name);
             TestCardMvt cardMvtScript = rtrCartes[i].GetComponent<TestCardMvt>();
+            //float xPosAdjustment, yPosAdjustment, gap, startPadding;
 
-            cardMvtScript.startPos = rtrCartes[i].anchoredPosition = new Vector2(-500, 400);
-            cardMvtScript.targetPos = new Vector2(-300 + (i * 150), 0);
+            //(xPosAdjustment, yPosAdjustment, gap, startPadding) = CalculTargetPosition(i);
+
+            cardMvtScript.startPos = new Vector2(-500, 400);
+            //cardMvtScript.targetPos = new Vector2(-300 + (i * 150), 0);
+            cardMvtScript.targetPos = CalculTargetPosition(i);
+            cardMvtScript.step = Vector2.Distance(cardMvtScript.startPos, cardMvtScript.targetPos) * Time.deltaTime / 2;
+            cardMvtScript.enabled = true;
         }
 
         //rtrSelector = selector.GetComponent<RectTransform>();
@@ -79,5 +85,62 @@ public class TestCardHandler : MonoBehaviour
     void MoveUI(RectTransform item, Vector2 dest, MoveTowardsSpeedType moveTowardsSpeedType, float moveTime = 1)
     {
 
+    }
+
+    Vector2 CalculTargetPosition(int index)
+    {
+        int xPosAdjustment, yPosAdjustment = 0, gap = 300, startPadding, indexAdjustment = 0;
+        Vector2 targetPos;
+        const int width = 150, heigth = 225;
+
+        if (index < halvedLength)
+        {
+            // top row
+            yPosAdjustment = 400;
+
+            switch (Math.Ceiling(halvedLength))
+            {
+                case 5:
+                    gap = 75;
+                    break;
+                case 4:
+                    gap = 100;
+                    break;
+                case 3:
+                    gap = 150;
+                    break;
+                case 2:
+                    break;
+                case 1:
+                    break;
+            }
+        }
+        else
+        {
+            // bottom row
+            indexAdjustment = (int) Math.Ceiling(halvedLength);
+
+            switch (Math.Floor(halvedLength))
+            {
+                case 5:
+                    gap = 75;
+                    break;
+                case 4:
+                    gap = 100;
+                    break;
+                case 3:
+                    gap = 150;
+                    break;
+                case 2:
+                    break;
+                case 1:
+                    break;
+            }
+
+        }
+
+        targetPos = new Vector2((index - indexAdjustment) * width + ((index - indexAdjustment) * gap), yPosAdjustment);
+
+        return targetPos;
     }
 }
