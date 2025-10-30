@@ -13,6 +13,7 @@ public class TestCardHandler : MonoBehaviour
     float halvedLength;
     RectTransform rtrSelector;
     int selectorPos = 0;
+    bool allowInput = true;
 
     enum MoveTowardsSpeedType
     {
@@ -49,24 +50,28 @@ public class TestCardHandler : MonoBehaviour
 
             //(xPosAdjustment, yPosAdjustment, gap, startPadding) = CalculTargetPosition(i);
 
-            cardMvtScript.startPos = new Vector2(-500, 400);
+            cardMvtScript.startPos = new Vector2(0, 400);
             //cardMvtScript.targetPos = new Vector2(-300 + (i * 150), 0);
             cardMvtScript.targetPos = CalculTargetPosition(i);
             cardMvtScript.step = Vector2.Distance(cardMvtScript.startPos, cardMvtScript.targetPos) * Time.deltaTime / 2;
             cardMvtScript.enabled = true;
         }
 
-        //rtrSelector = selector.GetComponent<RectTransform>();
-        //rtrSelector.anchoredPosition = rtrCartes[0].anchoredPosition;
-        //selector.SetActive(true);
+        rtrSelector = selector.GetComponent<RectTransform>();
+        rtrSelector.anchoredPosition = rtrCartes[selectorPos].anchoredPosition;
+        selector.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.RightArrow))
+        if (allowInput)
         {
-            //moveSelector = true;
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                //moveSelector = true;
+                MoveUI(rtrSelector, rtrCartes[selectorPos + 1].anchoredPosition, MoveTowardsSpeedType.Time, 2);
+            }
         }
     }
 
@@ -82,16 +87,18 @@ public class TestCardHandler : MonoBehaviour
     /// <param name="dest">The destination point</param>
     /// <param name="moveTowardsSpeedType">Type of movement. Either based on distance or time</param>
     /// <param name="moveTime">Time, in seconds for the movement. Only applies if moveTowardsSpeedType == MoveTowardsSpeedType.Time</param>
-    void MoveUI(RectTransform item, Vector2 dest, MoveTowardsSpeedType moveTowardsSpeedType, float moveTime = 1)
+    /// <param name="moveDistance">step value for the movement. Only applies if moveTowardsSpeedType == MoveTowardsSpeedType.Distance</param>
+    void MoveUI(RectTransform item, Vector2 dest, MoveTowardsSpeedType moveTowardsSpeedType, float moveTime = 1, float moveDistance = .1f)
     {
+        allowInput = false;
 
     }
 
     Vector2 CalculTargetPosition(int index)
     {
-        int xPosAdjustment, yPosAdjustment = 0, gap = 300, startPadding, indexAdjustment = 0;
+        int yPosAdjustment = 0, gap = 300, indexAdjustment = 0;
         Vector2 targetPos;
-        const int width = 150, heigth = 225;
+        const int width = 150;
 
         if (index < halvedLength)
         {
@@ -108,10 +115,6 @@ public class TestCardHandler : MonoBehaviour
                     break;
                 case 3:
                     gap = 150;
-                    break;
-                case 2:
-                    break;
-                case 1:
                     break;
             }
         }
@@ -130,10 +133,6 @@ public class TestCardHandler : MonoBehaviour
                     break;
                 case 3:
                     gap = 150;
-                    break;
-                case 2:
-                    break;
-                case 1:
                     break;
             }
 
