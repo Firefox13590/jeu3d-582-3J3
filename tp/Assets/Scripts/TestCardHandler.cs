@@ -13,7 +13,7 @@ public class TestCardHandler : MonoBehaviour
     float halvedLength;
     RectTransform rtrSelector;
     int selectorPos = 0;
-    bool allowInput = true;
+    bool moveSelector = false, allowInput = true;
 
     enum MoveTowardsSpeedType
     {
@@ -69,9 +69,16 @@ public class TestCardHandler : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                //moveSelector = true;
+                Debug.Log("Going right");
+                moveSelector = true;
+                allowInput = false;
                 MoveUI(rtrSelector, rtrCartes[selectorPos + 1].anchoredPosition, MoveTowardsSpeedType.Time, 2);
             }
+        }
+
+        if (moveSelector)
+        {
+            
         }
     }
 
@@ -91,7 +98,17 @@ public class TestCardHandler : MonoBehaviour
     void MoveUI(RectTransform item, Vector2 dest, MoveTowardsSpeedType moveTowardsSpeedType, float moveTime = 1, float moveDistance = .1f)
     {
         allowInput = false;
+        Vector2 start = item.anchoredPosition;
+        float distance = Vector2.Distance(item.anchoredPosition, dest);
 
+        while(distance > 0)
+        {
+            item.anchoredPosition = Vector2.MoveTowards(item.anchoredPosition, dest, moveTowardsSpeedType == MoveTowardsSpeedType.Time ? 
+                (Vector2.Distance(start, dest) * (moveTime * Time.deltaTime)) : moveDistance);
+            distance = Vector2.Distance(item.anchoredPosition, dest);
+        }
+
+        allowInput = true;
     }
 
     Vector2 CalculTargetPosition(int index)
