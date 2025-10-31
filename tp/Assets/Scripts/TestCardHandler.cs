@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Lib;
 
 public class TestCardHandler : MonoBehaviour
 {
@@ -72,13 +73,21 @@ public class TestCardHandler : MonoBehaviour
                 Debug.Log("Going right");
                 moveSelector = true;
                 allowInput = false;
-                MoveUI(rtrSelector, rtrCartes[selectorPos + 1].anchoredPosition, MoveTowardsSpeedType.Time, 2);
+                //MoveUI(rtrSelector.anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, MoveTowardsSpeedType.Time, 2);
             }
         }
 
         if (moveSelector)
         {
-            
+            float baseSelectorDistance = Vector2.Distance(rtrCartes[selectorPos].anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition);
+            //Debug.Log("baseSelectorDistance: " + baseSelectorDistance);
+
+            rtrSelector.anchoredPosition = MoveUI
+                (rtrSelector.anchoredPosition, 
+                rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, 
+                ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1), 
+                MoveTowardsSpeedType.Time,
+                moveTime: baseSelectorDistance * Time.deltaTime);
         }
     }
 
@@ -90,25 +99,28 @@ public class TestCardHandler : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="item">The UI element to move around</param>
+    /// <param name="start">The start point</param>
     /// <param name="dest">The destination point</param>
     /// <param name="moveTowardsSpeedType">Type of movement. Either based on distance or time</param>
     /// <param name="moveTime">Time, in seconds for the movement. Only applies if moveTowardsSpeedType == MoveTowardsSpeedType.Time</param>
     /// <param name="moveDistance">step value for the movement. Only applies if moveTowardsSpeedType == MoveTowardsSpeedType.Distance</param>
-    void MoveUI(RectTransform item, Vector2 dest, MoveTowardsSpeedType moveTowardsSpeedType, float moveTime = 1, float moveDistance = .1f)
+    Vector2 MoveUI(Vector2 start, Vector2 dest, int targetIndex, MoveTowardsSpeedType moveTowardsSpeedType, float moveTime = 1, float moveDistance = .1f)
     {
-        allowInput = false;
-        Vector2 start = item.anchoredPosition;
-        float distance = Vector2.Distance(item.anchoredPosition, dest);
+        float distance = Vector2.Distance(start, dest);
+        Vector2 updatedPos = start;
 
-        while(distance > 0)
+        if(distance > 0)
         {
-            item.anchoredPosition = Vector2.MoveTowards(item.anchoredPosition, dest, moveTowardsSpeedType == MoveTowardsSpeedType.Time ? 
-                (Vector2.Distance(start, dest) * (moveTime * Time.deltaTime)) : moveDistance);
-            distance = Vector2.Distance(item.anchoredPosition, dest);
+            updatedPos = Vector2.MoveTowards(updatedPos, dest, moveTowardsSpeedType == MoveTowardsSpeedType.Time ? moveTime : moveDistance);
+        }
+        else
+        {
+            moveSelector = false;
+            allowInput = true;
+            selectorPos = targetIndex;
         }
 
-        allowInput = true;
+        return updatedPos;
     }
 
     Vector2 CalculTargetPosition(int index)
