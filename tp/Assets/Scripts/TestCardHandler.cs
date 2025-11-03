@@ -43,20 +43,20 @@ public class TestCardHandler : MonoBehaviour
 
 
         rtrCartes = new List<RectTransform>(parentListeCarte.GetComponentsInChildren<RectTransform>()[1..]);
-        for(int i = 0; i < rtrCartes.Count; i++)
-        {
-            //Debug.Log(rtrCartes[i].name);
-            TestCardMvt cardMvtScript = rtrCartes[i].GetComponent<TestCardMvt>();
-            //float xPosAdjustment, yPosAdjustment, gap, startPadding;
+        //for(int i = 0; i < rtrCartes.Count; i++)
+        //{
+        //    //Debug.Log(rtrCartes[i].name);
+        //    TestCardMvt cardMvtScript = rtrCartes[i].GetComponent<TestCardMvt>();
+        //    //float xPosAdjustment, yPosAdjustment, gap, startPadding;
 
-            //(xPosAdjustment, yPosAdjustment, gap, startPadding) = CalculTargetPosition(i);
+        //    //(xPosAdjustment, yPosAdjustment, gap, startPadding) = CalculTargetPosition(i);
 
-            cardMvtScript.startPos = new Vector2(0, 400);
-            //cardMvtScript.targetPos = new Vector2(-300 + (i * 150), 0);
-            cardMvtScript.targetPos = CalculTargetPosition(i);
-            cardMvtScript.step = Vector2.Distance(cardMvtScript.startPos, cardMvtScript.targetPos) * Time.deltaTime / 2;
-            cardMvtScript.enabled = true;
-        }
+        //    cardMvtScript.startPos = new Vector2(0, 400);
+        //    cardMvtScript.targetPos = CalculTargetPosition(i);
+        //    cardMvtScript.step = Vector2.Distance(cardMvtScript.startPos, cardMvtScript.targetPos) * Time.deltaTime / 2;
+        //    cardMvtScript.enabled = true;
+        //}
+        PositionCards(rtrCartes);
 
         rtrSelector = selector.GetComponent<RectTransform>();
         rtrSelector.anchoredPosition = rtrCartes[selectorPos].anchoredPosition;
@@ -123,6 +123,11 @@ public class TestCardHandler : MonoBehaviour
         return updatedPos;
     }
 
+    void MoveSelector(int moveIndicator)
+    {
+
+    }
+
     Vector2 CalculTargetPosition(int index)
     {
         int yPosAdjustment = 0, gap = 300, indexAdjustment = 0;
@@ -170,5 +175,24 @@ public class TestCardHandler : MonoBehaviour
         targetPos = new Vector2((index - indexAdjustment) * width + ((index - indexAdjustment) * gap), yPosAdjustment);
 
         return targetPos;
+    }
+
+    void PositionCards(List<RectTransform> rtrList)
+    {
+        for (int i = 0; i < rtrList.Count; i++)
+        {
+            //Debug.Log(rtrList[i].name);
+            //TestCardMvt cardMvtScript = rtrCartes[i].GetComponent<TestCardMvt>();
+            //float xPosAdjustment, yPosAdjustment, gap, startPadding;
+
+            //(xPosAdjustment, yPosAdjustment, gap, startPadding) = CalculTargetPosition(i);
+
+            //cardMvtScript.startPos = new Vector2(0, 400);
+            //cardMvtScript.targetPos = CalculTargetPosition(i);
+            //cardMvtScript.step = Vector2.Distance(cardMvtScript.startPos, cardMvtScript.targetPos) * Time.deltaTime / 2;
+            //cardMvtScript.enabled = true;
+
+            rtrList[i].anchoredPosition = CalculTargetPosition(i);
+        }
     }
 }
