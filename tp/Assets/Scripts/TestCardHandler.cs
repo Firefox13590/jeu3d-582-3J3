@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Lib;
+using static Lib.ArrayMovement;
 
 public class TestCardHandler : MonoBehaviour
 {
@@ -28,19 +29,6 @@ public class TestCardHandler : MonoBehaviour
         //Debug.Log(halvedLength);
         //Debug.Log(Math.Ceiling(halvedLength));
         //Debug.Log(Math.Floor(halvedLength));
-        //rtrCartes[0] = parentListeCarte.GetComponentsInChildren<RectTransform>()[1..((int) Math.Ceiling(halvedLength) + 1)];
-        //rtrCartes[1] = parentListeCarte.GetComponentsInChildren<RectTransform>()[((int) Math.Floor(halvedLength) + 1)..];
-        //Debug.Log("premiere partie: " + rtrCartes[0].Length + "\ndeuxieme partie: " + rtrCartes[1].Length);
-
-        //for(int i = 0; i < rtrCartes.Length; i++)
-        //{
-        //    for(int j = 0; j < rtrCartes[i].Length; j++)
-        //    {
-        //        //Debug.Log("rtrCartes[" + i + "][" + j + "] = " + rtrCartes[i][j].name);
-        //        rtrCartes[i][j].anchoredPosition = new Vector2(-500, 400);
-        //    }
-        //}
-
 
         rtrCartes = new List<RectTransform>(parentListeCarte.GetComponentsInChildren<RectTransform>()[1..]);
         //for(int i = 0; i < rtrCartes.Count; i++)
@@ -66,29 +54,45 @@ public class TestCardHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (allowInput)
-        {
+        //if (allowInput)
+        //{
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 Debug.Log("Going right");
-                moveSelector = true;
-                allowInput = false;
+                //moveSelector = true;
+                //allowInput = false;
                 //MoveUI(rtrSelector.anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, MoveTowardsSpeedType.Time, 2);
+                MoveSelector(1);
             }
-        }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                Debug.Log("Going left");
+                MoveSelector(1, reverse: true);
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                Debug.Log("Going up");
+                MoveSelector((int) Math.Ceiling(halvedLength), reverse: true);
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                Debug.Log("Going down");
+                MoveSelector((int)Math.Ceiling(halvedLength));
+            }
+        //}
 
-        if (moveSelector)
-        {
-            float baseSelectorDistance = Vector2.Distance(rtrCartes[selectorPos].anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition);
-            //Debug.Log("baseSelectorDistance: " + baseSelectorDistance);
+        //if (moveSelector)
+        //{
+        //    float baseSelectorDistance = Vector2.Distance(rtrCartes[selectorPos].anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition);
+        //    //Debug.Log("baseSelectorDistance: " + baseSelectorDistance);
 
-            rtrSelector.anchoredPosition = MoveUI
-                (rtrSelector.anchoredPosition, 
-                rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, 
-                ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1), 
-                MoveTowardsSpeedType.Time,
-                moveTime: baseSelectorDistance * Time.deltaTime);
-        }
+        //    rtrSelector.anchoredPosition = MoveUI
+        //        (rtrSelector.anchoredPosition,
+        //        rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition,
+        //        ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1),
+        //        MoveTowardsSpeedType.Time,
+        //        moveTime: baseSelectorDistance * Time.deltaTime);
+        //}
     }
 
     void CardListNavigation()
@@ -123,9 +127,22 @@ public class TestCardHandler : MonoBehaviour
         return updatedPos;
     }
 
-    void MoveSelector(int moveIndicator)
+    void MoveSelector(int moveIndicator, ComparaisonType comparaison = ComparaisonType.GreaterThan, bool reverse = false)
     {
+        print(moveIndicator);
+        int start = selectorPos;
+        //print(reverse);
+        if (reverse && (int)comparaison > 0)
+        {
+            comparaison = (ComparaisonType)(-(int)comparaison);
+        }
+        //print(comparaison);
 
+        int end = CheckForLoopback(selectorPos, rtrCartes.Count - 1, moveIndicator, comparaison: comparaison, reverse: reverse);
+        print($"start: {start}, end: {end}");
+        rtrSelector.anchoredPosition = rtrCartes[end].anchoredPosition;
+        selectorPos = end;
+        print(rtrSelector.anchoredPosition);
     }
 
     Vector2 CalculTargetPosition(int index)

@@ -6,55 +6,72 @@ namespace Lib
 {
     public class ArrayMovement
     {
+        public enum ComparaisonType
+        {
+            LowerThan = -2,
+            LessThanOrEqualTo = -1,
+            EqualTo = 0,
+            GreaterThanOrEqualTo = 1,
+            GreaterThan = 2
+        }
+
         /// <summary>
         /// Checks whether the specified value exceeds the maximum limit and resets it if necessary.
         /// </summary>
-        /// <param name="value">The value to check against the maximum limit.</param>
+        /// <param name="value">The value to check against the limit.</param>
         /// <param name="max">The maximum allowable value.</param>
-        /// <param name="resetValue">The value to return if <paramref name="value"/> exceeds <paramref name="max"/>. Defaults to 0.</param>
-        /// <param name="comparaison">A character indicating the comparison operation. 'g' = '>=', 'e' = '==', 'o' = '>', 'u' = '<', 'l' = '<='.</param>
+        /// <param name="min">The value to return if <paramref name="value"/> exceeds <paramref name="max"/>. Defaults to 0.</param>
+        /// <param name="comparaison">An enum representing comparaison rule when checking.</param>
         /// <returns>The original <paramref name="value"/> if it does not exceed <paramref name="max"/>; otherwise, <paramref
-        /// name="resetValue"/>.</returns>
-        public static int CheckForResetLoop(int value, int max, int resetValue = 0, char comparaison = 'o', bool reverse = false)
+        /// name="min"/>.</returns>
+        public static int CheckForResetLoop(int value, int max, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThan, bool reverse = false)
         {
             //Debug.Log($"value: {value}, max: {max}");
-            if (!(new[] { 'u', 'l' }.Contains(comparaison) && reverse))
-            {
-                throw new Exception("Invalid comparaison character for the given direction.");
-            }
+            //if (!(new[] { -2, -1 }.Contains((int)comparaison) && reverse))
+            //{
+            //    throw new Exception("Invalid comparaison rule for the given direction.");
+            //}
 
-            if (comparaison == 'e' && value == max) return resetValue;
+            if ((int)comparaison == 0 && value == max) return min;
 
             if (!reverse)
             {
-                if (comparaison == 'o' && value > max ||
-                    comparaison == 'g' && value >= max)
+                if ((int)comparaison == 2 && value > max ||
+                    (int)comparaison == 1 && value >= max)
                 {
-                    //Debug.Log($"reset from {value} to {resetValue}");
-                    return resetValue;
+                    //Debug.Log($"reset from {value} to {min}");
+                    return min;
                 }
             }
             else
             {
-                if (comparaison == 'u' && value < max ||
-                    comparaison == 'l' && value <= max)
+                if (!(new[] {-2, -1}.Contains((int)comparaison)))
                 {
-                    //Debug.Log($"reset from {value} to {resetValue}");
-                    return resetValue;
+                    throw new Exception("Invalid comparaison rule for the given direction.");
+                }
+
+                if ((int)comparaison == -1 && value <= min ||
+                    (int)comparaison == -2 && value < min)
+                {
+                    //Debug.Log($"reset from {value} to {min}");
+                    return max;
                 }
             }
             //Debug.Log($"no reset, value stays {value}");
             return value;
         }
 
-        public static int CheckForLoopback(int value, int max, int iterations, int resetValue = 0, char comparaison = 'o', bool reverse = false)
+
+        public static int CheckForLoopback(int baseValue, int max, int iterations, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThan, bool reverse = false)
         {
             for(int i = iterations; i > 0; i--)
             {
-                value = CheckForResetLoop(value, max, resetValue, comparaison, reverse);
+                baseValue += reverse ? -1 : 1;
+                baseValue = CheckForResetLoop(baseValue, max, min, comparaison, reverse);
             }
 
-            return value;
+            return baseValue;
+            //return CheckForResetLoop(baseValue, max, min, comparaison, reverse);
         }
     }
 }
