@@ -56,6 +56,7 @@ public class TestCardHandler : MonoBehaviour
     {
         //if (allowInput)
         //{
+            // mouvement selecteur
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 Debug.Log("Going right");
@@ -78,6 +79,15 @@ public class TestCardHandler : MonoBehaviour
             {
                 Debug.Log("Going down");
                 MoveSelector((int)Math.Ceiling(halvedLength));
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Destroy(rtrCartes[selectorPos].gameObject);
+                foreach(RectTransform rtr in rtrCartes)
+                {
+                    Debug.Log(rtr);
+                }
             }
         //}
 
