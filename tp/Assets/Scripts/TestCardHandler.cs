@@ -8,6 +8,7 @@ public class TestCardHandler : MonoBehaviour
 {
     public GameObject parentListeCarte;
     public GameObject selector; //the glow object
+    public GameObject prefabCarte;
 
     //RectTransform[][] rtrCartes = new RectTransform[2][];
     //RectTransform[,] rtrCartes = new RectTransform[5, 2];
@@ -25,7 +26,7 @@ public class TestCardHandler : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        halvedLength = (parentListeCarte.GetComponentsInChildren<RectTransform>().Length - 1) / 2;
+        halvedLength = (parentListeCarte.GetComponentsInChildren<RectTransform>().Length - 1) / 2f;
         //Debug.Log(halvedLength);
         //Debug.Log(Math.Ceiling(halvedLength));
         //Debug.Log(Math.Floor(halvedLength));
@@ -56,39 +57,61 @@ public class TestCardHandler : MonoBehaviour
     {
         //if (allowInput)
         //{
-            // mouvement selecteur
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                Debug.Log("Going right");
-                //moveSelector = true;
-                //allowInput = false;
-                //MoveUI(rtrSelector.anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, MoveTowardsSpeedType.Time, 2);
-                MoveSelector(1);
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                Debug.Log("Going left");
-                MoveSelector(1, reverse: true);
-            }
-            else if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                Debug.Log("Going up");
-                MoveSelector((int) Math.Ceiling(halvedLength), reverse: true);
-            }
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                Debug.Log("Going down");
-                MoveSelector((int)Math.Ceiling(halvedLength));
-            }
+        // mouvement selecteur
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            Debug.Log("Going right");
+            //moveSelector = true;
+            //allowInput = false;
+            //MoveUI(rtrSelector.anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, MoveTowardsSpeedType.Time, 2);
+            MoveSelector(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            Debug.Log("Going left");
+            MoveSelector(1, reverse: true);
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Debug.Log("Going up");
+            MoveSelector((int)Math.Ceiling(halvedLength), reverse: true);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            Debug.Log("Going down");
+            MoveSelector((int)Math.Ceiling(halvedLength));
+        }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Destroy(rtrCartes[selectorPos].gameObject);
+            //foreach (RectTransform rtr in rtrCartes)
+            //{
+            //    Debug.Log(rtr);
+            //}
+
+            rtrCartes.RemoveAt(selectorPos);
+            if(rtrCartes.Count == 0)
             {
-                Destroy(rtrCartes[selectorPos].gameObject);
-                foreach(RectTransform rtr in rtrCartes)
+                selector.SetActive(false);
+                for(int i = 0; i < 10; i++)
                 {
-                    Debug.Log(rtr);
+                    GameObject instanceCarte = Instantiate(prefabCarte, parentListeCarte.GetComponent<RectTransform>());
+                    instanceCarte.name += $"_{i}";
                 }
+                print(parentListeCarte.transform.childCount);
+                rtrCartes = new List<RectTransform>(parentListeCarte.GetComponentsInChildren<RectTransform>()[2..]);
+                print(rtrCartes.Count);
+                selector.SetActive(true);
             }
+            //else
+            //{
+                halvedLength = (rtrCartes.Count) / 2f;
+                PositionCards(rtrCartes);
+                selectorPos = 0;
+                rtrSelector.anchoredPosition = rtrCartes[selectorPos].anchoredPosition;
+            //}
+        }
         //}
 
         //if (moveSelector)
@@ -123,7 +146,7 @@ public class TestCardHandler : MonoBehaviour
         float distance = Vector2.Distance(start, dest);
         Vector2 updatedPos = start;
 
-        if(distance > 0)
+        if (distance > 0)
         {
             updatedPos = Vector2.MoveTowards(updatedPos, dest, moveTowardsSpeedType == MoveTowardsSpeedType.Time ? moveTime : moveDistance);
         }
@@ -157,11 +180,12 @@ public class TestCardHandler : MonoBehaviour
 
     Vector2 CalculTargetPosition(int index)
     {
-        int yPosAdjustment = 0, gap = 300, indexAdjustment = 0;
+        int xPosAdjustment, yPosAdjustment, indexAdjustment, gap = 300;
+        xPosAdjustment = yPosAdjustment = indexAdjustment = 0;
         Vector2 targetPos;
         const int width = 150;
 
-        if (index < halvedLength)
+        if (index < Math.Ceiling(halvedLength))
         {
             // top row
             yPosAdjustment = 400;
@@ -173,16 +197,24 @@ public class TestCardHandler : MonoBehaviour
                     break;
                 case 4:
                     gap = 100;
+                    xPosAdjustment = 75;
                     break;
                 case 3:
-                    gap = 150;
+                    xPosAdjustment = gap = 150;
+                    break;
+                case 2:
+                    gap = 300;
+                    xPosAdjustment = 225;
+                    break;
+                case 1:
+                    xPosAdjustment = 450;
                     break;
             }
         }
         else
         {
             // bottom row
-            indexAdjustment = (int) Math.Ceiling(halvedLength);
+            indexAdjustment = (int)Math.Ceiling(halvedLength);
 
             switch (Math.Floor(halvedLength))
             {
@@ -191,15 +223,23 @@ public class TestCardHandler : MonoBehaviour
                     break;
                 case 4:
                     gap = 100;
+                    xPosAdjustment = 75;
                     break;
                 case 3:
-                    gap = 150;
+                    xPosAdjustment = gap = 150;
+                    break;
+                case 2:
+                    gap = 300;
+                    xPosAdjustment = 225;
+                    break;
+                case 1:
+                    xPosAdjustment = 450;
                     break;
             }
 
         }
 
-        targetPos = new Vector2((index - indexAdjustment) * width + ((index - indexAdjustment) * gap), yPosAdjustment);
+        targetPos = new Vector2((index - indexAdjustment) * width + ((index - indexAdjustment) * gap) + xPosAdjustment, yPosAdjustment);
 
         return targetPos;
     }
