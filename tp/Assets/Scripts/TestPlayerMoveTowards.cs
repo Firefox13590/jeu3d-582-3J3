@@ -6,6 +6,8 @@ public class TestPlayerMoveTowards : MonoBehaviour
     public Vector3 startPos, endPos;
     public Vector3[] ListEndPos;
     public float step = 1;
+    public TestCardHandler cardHandlerScript;
+
     TestMvtSurCases backendScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,7 +38,9 @@ public class TestPlayerMoveTowards : MonoBehaviour
         else
         {
             //Debug.Log("Great walk finished!");
-            backendScript.allowInput = true;
+            //backendScript.allowInput = true;
+            cardHandlerScript.allowInput = true;
+            cardHandlerScript.parentListeCarte.SetActive(true);
             GetComponent<TestPlayerMoveTowards>().enabled = false;
         }
     }

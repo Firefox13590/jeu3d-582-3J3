@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Lib;
 using static Lib.ArrayMovement;
+using System.Linq;
+using TMPro;
+using Random = UnityEngine.Random;
 
 public class TestCardHandler : MonoBehaviour
 {
     public GameObject parentListeCarte;
     public GameObject selector; //the glow object
     public GameObject prefabCarte;
+    public TestMvtSurCases playerScript;
+    public TextMeshProUGUI affichageRolls;
 
     //RectTransform[][] rtrCartes = new RectTransform[2][];
     //RectTransform[,] rtrCartes = new RectTransform[5, 2];
@@ -16,7 +21,9 @@ public class TestCardHandler : MonoBehaviour
     float halvedLength;
     RectTransform rtrSelector;
     int selectorPos = 0;
-    bool moveSelector = false, allowInput = true;
+    bool moveSelector = false;
+    public bool allowInput = true;
+    List<int> shuffledCardValues = new List<int>();
 
     enum MoveTowardsSpeedType
     {
@@ -50,69 +57,79 @@ public class TestCardHandler : MonoBehaviour
         rtrSelector = selector.GetComponent<RectTransform>();
         rtrSelector.anchoredPosition = rtrCartes[selectorPos].anchoredPosition;
         selector.SetActive(true);
+
+        print(playerScript);
+        playerScript.allowInput = false;
+        ShuffleCards(shuffledCardValues, rtrCartes.Count);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (allowInput)
-        //{
-        // mouvement selecteur
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (allowInput)
         {
-            Debug.Log("Going right");
-            //moveSelector = true;
-            //allowInput = false;
-            //MoveUI(rtrSelector.anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, MoveTowardsSpeedType.Time, 2);
-            MoveSelector(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            Debug.Log("Going left");
-            MoveSelector(1, reverse: true);
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            Debug.Log("Going up");
-            MoveSelector((int)Math.Ceiling(halvedLength), reverse: true);
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            Debug.Log("Going down");
-            MoveSelector((int)Math.Ceiling(halvedLength));
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Destroy(rtrCartes[selectorPos].gameObject);
-            //foreach (RectTransform rtr in rtrCartes)
-            //{
-            //    Debug.Log(rtr);
-            //}
-
-            rtrCartes.RemoveAt(selectorPos);
-            if(rtrCartes.Count == 0)
+            // mouvement selecteur
+            if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                selector.SetActive(false);
-                for(int i = 0; i < 10; i++)
-                {
-                    GameObject instanceCarte = Instantiate(prefabCarte, parentListeCarte.GetComponent<RectTransform>());
-                    instanceCarte.name += $"_{i}";
-                }
-                print(parentListeCarte.transform.childCount);
-                rtrCartes = new List<RectTransform>(parentListeCarte.GetComponentsInChildren<RectTransform>()[2..]);
-                print(rtrCartes.Count);
-                selector.SetActive(true);
+                Debug.Log("Going right");
+                //moveSelector = true;
+                //allowInput = false;
+                //MoveUI(rtrSelector.anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, MoveTowardsSpeedType.Time, 2);
+                MoveSelector(1);
             }
-            //else
-            //{
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                Debug.Log("Going left");
+                MoveSelector(1, reverse: true);
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                Debug.Log("Going up");
+                MoveSelector((int)Math.Ceiling(halvedLength), reverse: true);
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                Debug.Log("Going down");
+                MoveSelector((int)Math.Ceiling(halvedLength));
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                affichageRolls.text = "Roll: " + shuffledCardValues[selectorPos];
+                playerScript.caseIncrease = Math.Abs(shuffledCardValues[selectorPos]);
+                playerScript.reverseArrayCheck = (shuffledCardValues[selectorPos] < 0);
+                playerScript.allowInput = true;
+                playerScript.AvancePlayer();
+                allowInput = false;
+
+                Destroy(rtrCartes[selectorPos].gameObject);
+                rtrCartes.RemoveAt(selectorPos);
+                shuffledCardValues.RemoveAt(selectorPos);
+                parentListeCarte.SetActive(false);
+
+                if (rtrCartes.Count == 0)
+                {
+                    selector.SetActive(false);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        GameObject instanceCarte = Instantiate(prefabCarte, parentListeCarte.GetComponent<RectTransform>());
+                        instanceCarte.name += $"_{i}";
+                    }
+                    print(parentListeCarte.transform.childCount);
+                    rtrCartes = new List<RectTransform>(parentListeCarte.GetComponentsInChildren<RectTransform>()[2..]);
+                    print(rtrCartes.Count);
+                    selector.SetActive(true);
+                    ShuffleCards(shuffledCardValues, rtrCartes.Count);
+                }
+                //else
+                //{
                 halvedLength = (rtrCartes.Count) / 2f;
                 PositionCards(rtrCartes);
                 selectorPos = 0;
                 rtrSelector.anchoredPosition = rtrCartes[selectorPos].anchoredPosition;
-            //}
+                //}
+            }
         }
-        //}
 
         //if (moveSelector)
         //{
@@ -261,5 +278,14 @@ public class TestCardHandler : MonoBehaviour
 
             rtrList[i].anchoredPosition = CalculTargetPosition(i);
         }
+    }
+
+    void ShuffleCards(List<int> values, int length)
+    {
+        for (int i = 0; i < length; i++)
+        {
+            values.Add(Random.Range(-7, 7));
+        }
+        values.OrderBy(x => Random.value).ToList();
     }
 }

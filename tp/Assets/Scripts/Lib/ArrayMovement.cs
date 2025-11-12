@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System;
+using System.ComponentModel;
 
 namespace Lib
 {
@@ -32,6 +33,13 @@ namespace Lib
             //    throw new Exception("Invalid comparaison rule for the given direction.");
             //}
 
+            if (!(new[] { -2, -1 }.Contains((int)comparaison) && reverse))
+            {
+                //throw new Exception("Invalid comparaison rule for the given direction.");
+                Debug.LogWarning("Mismatch in comparaison rule and direction (value). defaults to value\'s direction");
+                reverse = (value < 0);
+            }
+
             if ((int)comparaison == 0 && value == max) return min;
 
             if (!reverse)
@@ -45,11 +53,6 @@ namespace Lib
             }
             else
             {
-                if (!(new[] {-2, -1}.Contains((int)comparaison)))
-                {
-                    throw new Exception("Invalid comparaison rule for the given direction.");
-                }
-
                 if ((int)comparaison == -1 && value <= min ||
                     (int)comparaison == -2 && value < min)
                 {

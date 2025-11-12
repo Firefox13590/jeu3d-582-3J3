@@ -1,5 +1,7 @@
 using System.Linq;
 using UnityEngine;
+using Lib;
+using static Lib.ArrayMovement.ComparaisonType;
 
 public class TestMvtSurCases : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class TestMvtSurCases : MonoBehaviour
     int currentPos = 0;
     TestPlayerMoveTowards frontendScript;
     public bool allowInput = true;
+    public bool reverseArrayCheck = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,16 +25,17 @@ public class TestMvtSurCases : MonoBehaviour
         Debug.Log("nb cases: " + trCaseList.Length);
         transform.position = trCaseList[currentPos].position;
         frontendScript = GetComponent<TestPlayerMoveTowards>();
+        print("caseIncrease: " + caseIncrease + "    reverse: " + reverseArrayCheck);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && allowInput)
-        {
-            currentPos = CalculAvanceCase(currentPos, caseIncrease, trCaseList);
-            allowInput = false;
-        }
+        //if (Input.GetKeyDown(KeyCode.Space) && allowInput)
+        //{
+        //    currentPos = CalculAvanceCase(currentPos, caseIncrease, trCaseList);
+        //    allowInput = false;
+        //}
     }
 
     /// <summary>
@@ -44,13 +48,20 @@ public class TestMvtSurCases : MonoBehaviour
     {
         Debug.Log($"debut pre-check loop: {currentPos}\nmoves left: {movesLeft}");
         int nextPos, maxPos = trCaseList.Length - 1;
-        frontendScript.startPos = trCaseList[CheckForResetLoop(currentPos, maxPos)].position;
+        frontendScript.startPos = trCaseList[ArrayMovement.CheckForResetLoop(currentPos, maxPos, reverse: reverseArrayCheck)].position;
 
         while (movesLeft > 0)
         {
-            currentPos = CheckForResetLoop(currentPos, maxPos);
-            nextPos = currentPos + 1;
-            nextPos = CheckForResetLoop(nextPos, maxPos/*, comparaison: 'g'*/);
+            currentPos = ArrayMovement.CheckForResetLoop(currentPos, maxPos, reverse: reverseArrayCheck);
+            if (reverseArrayCheck)
+            {
+                nextPos = currentPos + 1;
+            }
+            else
+            {
+                nextPos = currentPos - 1;
+            }
+            nextPos = ArrayMovement.CheckForResetLoop(nextPos, maxPos, reverse: reverseArrayCheck);
             Debug.Log($"pos 1 index:{currentPos}\npos 2 index:{nextPos}");
             MovePlayer(trCaseList[currentPos].position, trCaseList[nextPos].position, tempsMvtJoueur);
             currentPos++;
@@ -75,8 +86,8 @@ public class TestMvtSurCases : MonoBehaviour
     {
         //Debug.Log($"value: {value}, max: {max}");
 
-        if (comparaison == 'e' && value == max || 
-            comparaison == 'o' && value > max || 
+        if (comparaison == 'e' && value == max ||
+            comparaison == 'o' && value > max ||
             comparaison == 'g' && value >= max)
         {
             //Debug.Log($"reset from {value} to {resetValue}");
@@ -121,5 +132,11 @@ public class TestMvtSurCases : MonoBehaviour
         //mvtScript.step = vitesseMvtJoueur * Time.deltaTime;
         frontendScript.step = oneFrameDistance;
         //mvtScript.enabled = true;
+    }
+
+    public void AvancePlayer()
+    {
+        currentPos = CalculAvanceCase(currentPos, caseIncrease, trCaseList);
+        allowInput = false;
     }
 }
