@@ -58,7 +58,7 @@ public class TestCardHandler : MonoBehaviour
         rtrSelector.anchoredPosition = rtrCartes[selectorPos].anchoredPosition;
         selector.SetActive(true);
 
-        print(playerScript);
+        //print(playerScript);
         playerScript.allowInput = false;
         ShuffleCards(shuffledCardValues, rtrCartes.Count);
     }
@@ -96,9 +96,18 @@ public class TestCardHandler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 affichageRolls.text = "Roll: " + shuffledCardValues[selectorPos];
+                Debug.Log("shuffledCardValue selected: " + shuffledCardValues[selectorPos]);
                 playerScript.caseIncrease = Math.Abs(shuffledCardValues[selectorPos]);
                 playerScript.reverseArrayCheck = (shuffledCardValues[selectorPos] < 0);
-                playerScript.allowInput = true;
+                if (shuffledCardValues[selectorPos] < 0)
+                {
+                    playerScript.comparaisonType = ComparaisonType.LessThanOrEqualTo;
+                }
+                else
+                {
+                    playerScript.comparaisonType = ComparaisonType.GreaterThanOrEqualTo;
+                }
+                //playerScript.allowInput = true;
                 playerScript.AvancePlayer();
                 allowInput = false;
 
@@ -192,7 +201,7 @@ public class TestCardHandler : MonoBehaviour
         print($"start: {start}, end: {end}");
         rtrSelector.anchoredPosition = rtrCartes[end].anchoredPosition;
         selectorPos = end;
-        print(rtrSelector.anchoredPosition);
+        //print(rtrSelector.anchoredPosition);
     }
 
     Vector2 CalculTargetPosition(int index)

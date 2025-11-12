@@ -25,22 +25,25 @@ namespace Lib
         /// <param name="comparaison">An enum representing comparaison rule when checking.</param>
         /// <returns>The original <paramref name="value"/> if it does not exceed <paramref name="max"/>; otherwise, <paramref
         /// name="min"/>.</returns>
-        public static int CheckForResetLoop(int value, int max, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThan, bool reverse = false)
+        public static int CheckForResetLoop(int value, int max, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThanOrEqualTo, bool reverse = false)
         {
             //Debug.Log($"value: {value}, max: {max}");
-            //if (!(new[] { -2, -1 }.Contains((int)comparaison) && reverse))
-            //{
-            //    throw new Exception("Invalid comparaison rule for the given direction.");
-            //}
-
-            if (!(new[] { -2, -1 }.Contains((int)comparaison) && reverse))
+            if (new[] { -2, -1 }.Contains((int)comparaison) ^ reverse)
             {
-                //throw new Exception("Invalid comparaison rule for the given direction.");
-                Debug.LogWarning("Mismatch in comparaison rule and direction (value). defaults to value\'s direction");
-                reverse = (value < 0);
+                throw new Exception($"Invalid comparaison rule for the given direction (value).\n" +
+                    $"Value: {value}    ComparaisonType: {comparaison}    Reverse: {reverse}");
             }
 
+            //if (!(new[] { -2, -1 }.Contains((int)comparaison) && reverse))
+            //{
+            //    //throw new Exception("Invalid comparaison rule for the given direction.");
+            //    Debug.LogWarning("Mismatch in comparaison rule and direction (value). defaults to value\'s direction");
+            //    reverse = (value < 0);
+            //    comparaison = (ComparaisonType)(-(int)comparaison);
+            //}
+
             if ((int)comparaison == 0 && value == max) return min;
+            if ((int)comparaison == 0 && value == min) return max;
 
             if (!reverse)
             {

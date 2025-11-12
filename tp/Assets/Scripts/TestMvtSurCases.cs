@@ -14,6 +14,7 @@ public class TestMvtSurCases : MonoBehaviour
     TestPlayerMoveTowards frontendScript;
     public bool allowInput = true;
     public bool reverseArrayCheck = false;
+    public ArrayMovement.ComparaisonType comparaisonType = GreaterThan;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,10 +23,10 @@ public class TestMvtSurCases : MonoBehaviour
         // enlever premier element (parent empty) avec spread operator
         // change valeurs du array pour commencer a l'index 1 (seulement les cases)
         trCaseList = trCaseList[1..];
-        Debug.Log("nb cases: " + trCaseList.Length);
+        //Debug.Log("nb cases: " + trCaseList.Length);
         transform.position = trCaseList[currentPos].position;
         frontendScript = GetComponent<TestPlayerMoveTowards>();
-        print("caseIncrease: " + caseIncrease + "    reverse: " + reverseArrayCheck);
+        //print("caseIncrease: " + caseIncrease + "    reverse: " + reverseArrayCheck);
     }
 
     // Update is called once per frame
@@ -48,12 +49,13 @@ public class TestMvtSurCases : MonoBehaviour
     {
         Debug.Log($"debut pre-check loop: {currentPos}\nmoves left: {movesLeft}");
         int nextPos, maxPos = trCaseList.Length - 1;
-        frontendScript.startPos = trCaseList[ArrayMovement.CheckForResetLoop(currentPos, maxPos, reverse: reverseArrayCheck)].position;
+        frontendScript.startPos = trCaseList[ArrayMovement.CheckForResetLoop(currentPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck)].position;
+        Debug.Log("debut post-check loop: " + currentPos);
 
         while (movesLeft > 0)
         {
-            currentPos = ArrayMovement.CheckForResetLoop(currentPos, maxPos, reverse: reverseArrayCheck);
-            if (reverseArrayCheck)
+            currentPos = ArrayMovement.CheckForResetLoop(currentPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck);
+            if (!reverseArrayCheck)
             {
                 nextPos = currentPos + 1;
             }
@@ -61,10 +63,10 @@ public class TestMvtSurCases : MonoBehaviour
             {
                 nextPos = currentPos - 1;
             }
-            nextPos = ArrayMovement.CheckForResetLoop(nextPos, maxPos, reverse: reverseArrayCheck);
+            nextPos = ArrayMovement.CheckForResetLoop(nextPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck);
             Debug.Log($"pos 1 index:{currentPos}\npos 2 index:{nextPos}");
             MovePlayer(trCaseList[currentPos].position, trCaseList[nextPos].position, tempsMvtJoueur);
-            currentPos++;
+            currentPos = nextPos;
             movesLeft--;
         }
 
@@ -104,12 +106,12 @@ public class TestMvtSurCases : MonoBehaviour
         //transform.position = endPos;
 
         float distance = Vector3.Distance(startPos, endPos);
+        //Debug.Log("distance: " + distance);
         //float cooldown = elapsedTime / frames;
         //float oneFrameDistance = distance * cooldown;
         float oneFrameDistance = distance / (elapsedTime * frames);
-        Debug.Log("distance: " + distance);
+        //Debug.Log("oneframeDistance: " + oneFrameDistance);
         //Debug.Log("cooldown: " + cooldown);
-        Debug.Log("oneframeDistance: " + oneFrameDistance);
         //Debug.Log("deltaTime: " + Time.deltaTime);
         //while(distance > 0)
         //{
@@ -136,7 +138,8 @@ public class TestMvtSurCases : MonoBehaviour
 
     public void AvancePlayer()
     {
+        print("caseIncrease: " + caseIncrease + "    reverse: " + reverseArrayCheck + "    comparaison: " + comparaisonType);
         currentPos = CalculAvanceCase(currentPos, caseIncrease, trCaseList);
-        allowInput = false;
+        //allowInput = false;
     }
 }
