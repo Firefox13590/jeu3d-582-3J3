@@ -36,7 +36,8 @@ public class TestCardSpinning : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for(int i = 0; i < rtrCardList.Length; i++)
+        // appliquer rotation a chaque carte
+        for (int i = 0; i < rtrCardList.Length; i++)
         {
             rtrCardList[i].Rotate(0, vitessesRotationRandom[i], 0);
         }

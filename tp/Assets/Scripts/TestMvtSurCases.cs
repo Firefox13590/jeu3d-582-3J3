@@ -40,11 +40,11 @@ public class TestMvtSurCases : MonoBehaviour
     }
 
     /// <summary>
-    /// Calcule l'avancement du joueur sur les cases.
+    /// Calculates player movement across tiles.
     /// </summary>
-    /// <param name="currentPos"></param>
-    /// <param name="movesLeft"></param>
-    /// <param name="trCaseList"></param>
+    /// <param name="currentPos">Current position of the player.</param>
+    /// <param name="movesLeft">Number of moves left to make.</param>
+    /// <param name="trCaseList">List of all tiles.</param>
     int CalculAvanceCase(int currentPos, int movesLeft, Transform[] trCaseList)
     {
         Debug.Log($"debut pre-check loop: {currentPos}\nmoves left: {movesLeft}");
@@ -76,29 +76,12 @@ public class TestMvtSurCases : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks whether the specified value exceeds the maximum limit and resets it if necessary.
+    /// Moves the player from the start position to the end position over a specified duration.
     /// </summary>
-    /// <param name="value">The value to check against the maximum limit.</param>
-    /// <param name="max">The maximum allowable value.</param>
-    /// <param name="resetValue">The value to return if <paramref name="value"/> exceeds <paramref name="max"/>. Defaults to 0.</param>
-    /// <param name="comparaison">A character indicating the comparison operation. 'g' = '>=', 'e' = '==', 'o' = '>'.</param>
-    /// <returns>The original <paramref name="value"/> if it does not exceed <paramref name="max"/>; otherwise, <paramref
-    /// name="resetValue"/>.</returns>
-    int CheckForResetLoop(int value, int max, int resetValue = 0, char comparaison = 'o')
-    {
-        //Debug.Log($"value: {value}, max: {max}");
-
-        if (comparaison == 'e' && value == max ||
-            comparaison == 'o' && value > max ||
-            comparaison == 'g' && value >= max)
-        {
-            //Debug.Log($"reset from {value} to {resetValue}");
-            return resetValue;
-        }
-        //Debug.Log($"no reset, value stays {value}");
-        return value;
-    }
-
+    /// <param name="startPos">The starting position of the player.</param>
+    /// <param name="endPos">The target position of the player.</param>
+    /// <param name="elapsedTime">The time taken to move from start to end, in seconds. Defaults to 1.</param>
+    /// <param name="frames">The number of frames over which to interpolate the movement. Defaults to 30</param>
     void MovePlayer(Vector3 startPos, Vector3 endPos, float elapsedTime = 1, int frames = 30)
     {
         //Debug.Log(startPos.magnitude);
@@ -136,6 +119,9 @@ public class TestMvtSurCases : MonoBehaviour
         //mvtScript.enabled = true;
     }
 
+    /// <summary>
+    /// Public funtion to allow external scripts to trigger player movement.
+    /// </summary>
     public void AvancePlayer()
     {
         print("caseIncrease: " + caseIncrease + "    reverse: " + reverseArrayCheck + "    comparaison: " + comparaisonType);

@@ -25,6 +25,9 @@ public class TestCardHandler : MonoBehaviour
     public bool allowInput = true;
     List<int> shuffledCardValues = new List<int>();
 
+    /// <summary>
+    /// Enum for the type of step used in <c>MoveTowards()</c>
+    /// </summary>
     enum MoveTowardsSpeedType
     {
         Distance = 0,
@@ -60,7 +63,7 @@ public class TestCardHandler : MonoBehaviour
 
         //print(playerScript);
         playerScript.allowInput = false;
-        ShuffleCards(shuffledCardValues, rtrCartes.Count);
+        ShuffleCards(shuffledCardValues);
     }
 
     // Update is called once per frame
@@ -128,7 +131,7 @@ public class TestCardHandler : MonoBehaviour
                     rtrCartes = new List<RectTransform>(parentListeCarte.GetComponentsInChildren<RectTransform>()[2..]);
                     print(rtrCartes.Count);
                     selector.SetActive(true);
-                    ShuffleCards(shuffledCardValues, rtrCartes.Count);
+                    ShuffleCards(shuffledCardValues);
                 }
                 //else
                 //{
@@ -186,6 +189,12 @@ public class TestCardHandler : MonoBehaviour
         return updatedPos;
     }
 
+    /// <summary>
+    /// Handles the movement of the selector based on input
+    /// </summary>
+    /// <param name="moveIndicator">The number of indexes to move through.</param>
+    /// <param name="comparaison">The comparison type to use for the movement.</param>
+    /// <param name="reverse">Whether to reverse the movement direction or not (direction).</param>
     void MoveSelector(int moveIndicator, ComparaisonType comparaison = ComparaisonType.GreaterThan, bool reverse = false)
     {
         print(moveIndicator);
@@ -204,6 +213,11 @@ public class TestCardHandler : MonoBehaviour
         //print(rtrSelector.anchoredPosition);
     }
 
+    /// <summary>
+    /// Processes the target position for a card based on its index in the list.
+    /// </summary>
+    /// <param name="index">Index of the card</param>
+    /// <returns>The target position for the card</returns>
     Vector2 CalculTargetPosition(int index)
     {
         int xPosAdjustment, yPosAdjustment, indexAdjustment, gap = 300;
@@ -270,6 +284,10 @@ public class TestCardHandler : MonoBehaviour
         return targetPos;
     }
 
+    /// <summary>
+    /// Positions all cards in the list based on their index.
+    /// </summary>
+    /// <param name="rtrList">List of RectTransforms representing the cards' positioning.</param>
     void PositionCards(List<RectTransform> rtrList)
     {
         for (int i = 0; i < rtrList.Count; i++)
@@ -289,9 +307,13 @@ public class TestCardHandler : MonoBehaviour
         }
     }
 
-    void ShuffleCards(List<int> values, int length)
+    /// <summary>
+    /// Randomizes the order of card values.
+    /// </summary>
+    /// <param name="values">List of card values to shuffle.</param>
+    void ShuffleCards(List<int> values)
     {
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < values.Count; i++)
         {
             values.Add(Random.Range(-7, 7));
         }

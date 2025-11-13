@@ -7,6 +7,9 @@ namespace Lib
 {
     public class ArrayMovement
     {
+        /// <summary>
+        /// Enum representing the type of comparison to perform.
+        /// </summary>
         public enum ComparaisonType
         {
             LowerThan = -2,
@@ -20,11 +23,11 @@ namespace Lib
         /// Checks whether the specified value exceeds the maximum limit and resets it if necessary.
         /// </summary>
         /// <param name="value">The value to check against the limit.</param>
-        /// <param name="max">The maximum allowable value.</param>
-        /// <param name="min">The value to return if <paramref name="value"/> exceeds <paramref name="max"/>. Defaults to 0.</param>
-        /// <param name="comparaison">An enum representing comparaison rule when checking.</param>
-        /// <returns>The original <paramref name="value"/> if it does not exceed <paramref name="max"/>; otherwise, <paramref
-        /// name="min"/>.</returns>
+        /// <param name="max">The maximum allowable value (or last array index).</param>
+        /// <param name="min">The minimum allowable value (or first array index). Defaults to 0.</param>
+        /// <param name="comparaison">An enum representing comparaison rule when checking. Defaults to <c>ComparaisonType.GreaterThanOrEqualTo</c></param>
+        /// <param name="reverse">Determines if checking has to be done in reverse (checking agaisnt min instead of max). Defaults to false.</param>
+        /// <returns><paramref name="value"/> if it does not exceed <paramref name="max"/> or <paramref name="min"/> limits.</returns>
         public static int CheckForResetLoop(int value, int max, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThanOrEqualTo, bool reverse = false)
         {
             //Debug.Log($"value: {value}, max: {max}");
@@ -67,7 +70,16 @@ namespace Lib
             return value;
         }
 
-
+        /// <summary>
+        /// Loops method <c>CheckForLoopback()</c> for a number of iterations.
+        /// </summary>
+        /// <param name="baseValue">Base value before starting loop</param>
+        /// <param name="max">The maximum allowable value (or last array index).</param>
+        /// <param name="iterations">Number of iterations to perform.</param>
+        /// <param name="min">The minimum allowable value (or first array index). Defaults to 0.</param>
+        /// <param name="comparaison">An enum representing comparaison rule when checking. Defaults to <c>ComparaisonType.GreaterThanOrEqualTo</c></param>
+        /// <param name="reverse">Determines if checking has to be done in reverse (checking agaisnt min instead of max). Defaults to false.</param>
+        /// <returns>Output of <c>CheckForLoopback()</c> after <paramref name="iterations"/> iterations.</returns>
         public static int CheckForLoopback(int baseValue, int max, int iterations, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThan, bool reverse = false)
         {
             for(int i = iterations; i > 0; i--)
