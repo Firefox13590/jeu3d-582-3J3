@@ -23,13 +23,12 @@ public class ScriptCapsule : MonoBehaviour
 		if (Input.GetMouseButtonDown(0))
 		{
 			Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit infosCollision;
 
-			if (Physics.Raycast(camRay.origin, camRay.direction,out infosCollision, 5000f))
-			{
+            if (Physics.Raycast(camRay.origin, camRay.direction, out RaycastHit infosCollision, 5000f))
+            {
+                navAgent.SetDestination(infosCollision.point);
+            }
 
-			}
-
-		}
+        }
 	}
 }
