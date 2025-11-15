@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuNavigation : MonoBehaviour
 {
@@ -36,5 +37,10 @@ public class MenuNavigation : MonoBehaviour
             menu.anchoredPosition += movement;
         }
         menuActuel = menuCible;
+    }
+
+    public void LoadScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(sceneIndex);
     }
 }
