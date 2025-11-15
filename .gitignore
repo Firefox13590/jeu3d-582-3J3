@@ -86,3 +86,17 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 */[Aa]ssets/[Ss]treamingAssets/aa.meta
 */[Aa]ssets/[Ss]treamingAssets/aa/*
+
+
+
+
+
+# Projets non utilisés
+01-helico/
+02-personnage/
+/01-helico/
+/02-personnage/
+01-helico
+02-personnage
+# 03-souris/
+# 04-helico/
