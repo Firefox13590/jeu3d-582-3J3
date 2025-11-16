@@ -4,9 +4,11 @@ using UnityEngine.SceneManagement;
 public class MenuNavigation : MonoBehaviour
 {
     public RectTransform[] listeMenus;
+    [Range(0, 2)]
+    public int menuCible = 1;
 
     RectTransform rtrCanvas;
-    int menuActuel = 1, menuCible = 1;
+    int menuActuel = 1;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -18,6 +20,8 @@ public class MenuNavigation : MonoBehaviour
             listeMenus[i].sizeDelta = new Vector2(rtrCanvas.rect.width, rtrCanvas.rect.height);
             listeMenus[i].anchoredPosition = new Vector2(rtrCanvas.rect.width * (i - 1), 0);
         }
+
+        GoToMenu(menuCible);
     }
 
     // Update is called once per frame

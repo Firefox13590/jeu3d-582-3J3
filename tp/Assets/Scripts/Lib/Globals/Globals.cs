@@ -1,0 +1,37 @@
+using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Lib.Globals
+{
+    public struct PlayerControls
+    {
+        KeyCode up;
+        KeyCode right;
+        KeyCode down;
+        KeyCode left;
+        KeyCode action;
+        public readonly KeyCode[] allControls
+        {
+            get
+            {
+                return new KeyCode[5] { up, right, down, left, action };
+            }
+        }
+
+        public PlayerControls(KeyCode up, KeyCode right, KeyCode down, KeyCode left, KeyCode action)
+        {
+            this.up = up;
+            this.right = right;
+            this.down = down;
+            this.left = left;
+            this.action = action;
+        }
+
+        public override readonly string ToString()
+        {
+            return $"Up: {up}, Right: {right}, Down: {down}, Left: {left}, Action: {action}";
+        }
+    }
+}
