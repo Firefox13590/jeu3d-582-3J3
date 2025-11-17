@@ -6,10 +6,10 @@ using Lib.Entities;
 [CreateAssetMenu(fileName = "GameSettingsScriptableObject", menuName = "Scriptable Objects/GameSettingsScriptableObject")]
 public class GameSettingsScriptableObject : ScriptableObject
 {
-    Player player1 = new();
-    Player player2 = new();
-    Player player3 = new();
-    Player player4 = new();
+    public Player player1 = new();
+    public Player player2 = new();
+    public Player player3 = new();
+    public Player player4 = new();
 
     public Player[] players
     {

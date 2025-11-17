@@ -3,6 +3,7 @@ using Lib.Globals;
 
 namespace Lib.Entities
 {
+    [System.Serializable]
     public class Player
     {
         public PlayerControls controls;

@@ -12,3 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8132eea62911cd42b12921f5bf49e68, type: 3}
   m_Name: GameSettingsScriptableObject
   m_EditorClassIdentifier: Assembly-CSharp::GameSettingsScriptableObject
+  player1:
+    controls:
+      up: 273
+      right: 275
+      down: 274
+      left: 276
+      action: 13
+  player2:
+    controls:
+      up: 273
+      right: 275
+      down: 274
+      left: 276
+      action: 13
+  player3:
+    controls:
+      up: 273
+      right: 275
+      down: 274
+      left: 276
+      action: 13
+  player4:
+    controls:
+      up: 273
+      right: 275
+      down: 274
+      left: 276
+      action: 13

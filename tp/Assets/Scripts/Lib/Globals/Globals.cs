@@ -5,13 +5,14 @@ using System.Collections.Generic;
 
 namespace Lib.Globals
 {
+    [Serializable]
     public struct PlayerControls
     {
-        KeyCode up;
-        KeyCode right;
-        KeyCode down;
-        KeyCode left;
-        KeyCode action;
+        public KeyCode up;
+        public KeyCode right;
+        public KeyCode down;
+        public KeyCode left;
+        public KeyCode action;
         public readonly KeyCode[] allControls
         {
             get
