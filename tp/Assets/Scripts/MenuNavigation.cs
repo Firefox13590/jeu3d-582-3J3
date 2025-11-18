@@ -34,7 +34,7 @@ public class MenuNavigation : MonoBehaviour
     {
         menuCible = targetMenuIndex;
         Vector2 movement = listeMenus[menuActuel].anchoredPosition - listeMenus[menuCible].anchoredPosition;
-        Debug.Log("movement: " + movement);
+        //Debug.Log("movement: " + movement);
 
         foreach (RectTransform menu in listeMenus)
         {

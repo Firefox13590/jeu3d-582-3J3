@@ -1,6 +1,6 @@
+using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RegisterControlKey : MonoBehaviour
 {
@@ -8,12 +8,13 @@ public class RegisterControlKey : MonoBehaviour
 
     bool isListeningKey = false;
     TextMeshProUGUI textControle;
-    Button btn;
+    public KeyCode registeredKey = KeyCode.None;
+
+    public static event Action<int, string, KeyCode> OnControlKeyRegistered;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         textControle = GetComponentInChildren<TextMeshProUGUI>();
-        btn = GetComponentInChildren<Button>();
     }
 
     // Update is called once per frame
@@ -53,11 +54,19 @@ public class RegisterControlKey : MonoBehaviour
                 if(e.keyCode != KeyCode.Escape)
                 {
                     textControle.text = e.keyCode.ToString();
+                    registeredKey = e.keyCode;
                 }
                 Debug.Log("Detected key code: " + e.keyCode);
                 isListeningKey = false;
                 panelRegisterControlKey.SetActive(false);
+
+                //OnControlKeyRegistered?.Invoke(registeredKey);
             }
         }
+    }
+
+    (int, string, KeyCode) GetEventParameters()
+    {
+        return (0, gameObject.name, registeredKey);
     }
 }
