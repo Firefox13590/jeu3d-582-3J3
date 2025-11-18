@@ -13,7 +13,7 @@ public class MenuParametres : MonoBehaviour
         //    Debug.Log("Player controls: " + p.controls);
         //}
 
-        //RegisterControlKey.OnControlKeyRegistered += UpdateControlsKey;
+        RegisterControlKey.OnControlKeyRegistered += UpdateControlsKey;
     }
 
     // Update is called once per frame
@@ -22,8 +22,8 @@ public class MenuParametres : MonoBehaviour
 
     }
 
-    void UpdateControlsKey(KeyCode key)
+    void UpdateControlsKey(int indexPlayer, string nomControle, KeyCode key)
     {
-        Debug.Log("New registered key: " + key);
+        Debug.Log($"Event output (int, string, KeyCode): {indexPlayer}    {nomControle}    {key}");
     }
 }

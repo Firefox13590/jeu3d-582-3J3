@@ -6,11 +6,11 @@ namespace Lib.Entities
     [System.Serializable]
     public class Player
     {
-        public PlayerControls controls;
+        public Controls controls;
 
         public Player()
         {
-            this.controls = new PlayerControls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return);
+            this.controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return);
         }
     }
 }

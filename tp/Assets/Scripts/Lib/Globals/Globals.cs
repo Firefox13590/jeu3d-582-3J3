@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Lib.Globals
 {
     [Serializable]
-    public struct PlayerControls
+    public struct Controls
     {
         public KeyCode up;
         public KeyCode right;
@@ -21,7 +21,7 @@ namespace Lib.Globals
             }
         }
 
-        public PlayerControls(KeyCode up, KeyCode right, KeyCode down, KeyCode left, KeyCode action)
+        public Controls(KeyCode up, KeyCode right, KeyCode down, KeyCode left, KeyCode action)
         {
             this.up = up;
             this.right = right;

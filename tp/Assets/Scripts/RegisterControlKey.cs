@@ -60,13 +60,21 @@ public class RegisterControlKey : MonoBehaviour
                 isListeningKey = false;
                 panelRegisterControlKey.SetActive(false);
 
-                //OnControlKeyRegistered?.Invoke(registeredKey);
+                // decomposer le return tuple pour invoquer event
+                var (arg0, arg1) = GetMissingEventParameters();
+                OnControlKeyRegistered?.Invoke(arg0, arg1, e.keyCode);
             }
         }
     }
 
-    (int, string, KeyCode) GetEventParameters()
+    (int, string) GetMissingEventParameters()
     {
-        return (0, gameObject.name, registeredKey);
+        int indexPlayer;
+        string nomControle = gameObject.name.Split('_')[1];
+
+        indexPlayer = 0;
+        Debug.Log(GetComponentsInParent<RectTransform>()[2].gameObject.name.Split('_')[1]);
+
+        return (indexPlayer, nomControle);
     }
 }
