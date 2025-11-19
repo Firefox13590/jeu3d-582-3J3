@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using Lib;
-using static Lib.ArrayMovement.ComparaisonType;
+using static Lib.ArrayMovement;
 
 public class TestMvtSurCases : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class TestMvtSurCases : MonoBehaviour
     TestPlayerMoveTowards frontendScript;
     public bool allowInput = true;
     public bool reverseArrayCheck = false;
-    public ArrayMovement.ComparaisonType comparaisonType = GreaterThan;
+    public ComparaisonType comparaisonType = ComparaisonType.GreaterThan;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,12 +39,12 @@ public class TestMvtSurCases : MonoBehaviour
     {
         Debug.Log($"debut pre-check loop: {currentPos}\nmoves left: {movesLeft}");
         int nextPos, maxPos = trCaseList.Length - 1;
-        frontendScript.startPos = trCaseList[ArrayMovement.CheckForResetLoop(currentPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck)].position;
+        frontendScript.startPos = trCaseList[CheckForResetLoop(currentPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck)].position;
         Debug.Log("debut post-check loop: " + currentPos);
 
         while (movesLeft > 0)
         {
-            currentPos = ArrayMovement.CheckForResetLoop(currentPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck);
+            currentPos = CheckForResetLoop(currentPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck);
             if (!reverseArrayCheck)
             {
                 nextPos = currentPos + 1;
@@ -53,7 +53,7 @@ public class TestMvtSurCases : MonoBehaviour
             {
                 nextPos = currentPos - 1;
             }
-            nextPos = ArrayMovement.CheckForResetLoop(nextPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck);
+            nextPos = CheckForResetLoop(nextPos, maxPos, comparaison: comparaisonType, reverse: reverseArrayCheck);
             Debug.Log($"pos 1 index:{currentPos}\npos 2 index:{nextPos}");
             MovePlayer(trCaseList[currentPos].position, trCaseList[nextPos].position, tempsMvtJoueur);
             currentPos = nextPos;

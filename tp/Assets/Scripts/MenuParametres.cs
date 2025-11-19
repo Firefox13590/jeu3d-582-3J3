@@ -1,5 +1,7 @@
 using UnityEngine;
-using Lib.Entities;
+using TMPro;
+using System;
+using System.Linq;
 
 public class MenuParametres : MonoBehaviour
 {
@@ -9,20 +11,7 @@ public class MenuParametres : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //foreach(Player p in gameSettings.Players)
-        //{
-        //    Debug.Log("Player controls: " + p.controls);
-        //}
-
-        conteneursControlesPlayer = GameObject.FindGameObjectsWithTag("ConteneurControlesPlayer");
-        for (int i = 0; i < conteneursControlesPlayer.Length; i++)
-        {
-            for(int j = 0; j < 5; j++)
-            {
-                conteneursControlesPlayer[i].GetComponentsInChildren<RegisterControlKey>()[j].textControle.text =
-                    gameSettings.Players[i].controls.AllControls[j].ToString();
-            }
-        }
+        InitDefaultPlayerControls();
 
         RegisterControlKey.OnControlKeyRegistered += UpdateControlsKey;
     }
@@ -37,5 +26,23 @@ public class MenuParametres : MonoBehaviour
     void UpdateControlsKey(int indexPlayer, string nomControle, KeyCode key)
     {
         Debug.Log($"Event output (int, string, KeyCode): {indexPlayer}    {nomControle}    {key}");
+    }
+
+    void InitDefaultPlayerControls()
+    {
+        conteneursControlesPlayer = GameObject.FindGameObjectsWithTag("ConteneurControlesPlayer");
+        //conteneursControlesPlayer.OrderBy(conteneur => conteneur.name).ToArray();
+        Array.Sort(conteneursControlesPlayer, (a, b) => string.Compare(a.name, b.name, StringComparison.Ordinal));
+
+        for (int i = 0; i < conteneursControlesPlayer.Length; i++)
+        {
+            Debug.Log(conteneursControlesPlayer[i].name);
+            conteneursControlesPlayer[i].GetComponentInChildren<TextMeshProUGUI>().text = gameSettings.Players[i].name;
+            for (int j = 0; j < 5; j++)
+            {
+                conteneursControlesPlayer[i].GetComponentsInChildren<RegisterControlKey>()[j].textControle.text =
+                    gameSettings.Players[i].controls.AllControls[j].ToString();
+            }
+        }
     }
 }

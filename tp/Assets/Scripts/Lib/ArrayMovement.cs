@@ -1,11 +1,9 @@
-using UnityEngine;
 using System.Linq;
 using System;
-using System.ComponentModel;
 
 namespace Lib
 {
-    public class ArrayMovement
+    public static class ArrayMovement
     {
         /// <summary>
         /// Enum representing the type of comparison to perform.

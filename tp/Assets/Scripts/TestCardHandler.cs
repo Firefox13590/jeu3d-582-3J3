@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Lib;
 using static Lib.ArrayMovement;
 using System.Linq;
 using TMPro;
@@ -13,7 +12,8 @@ public class TestCardHandler : MonoBehaviour
     public GameObject selector; //the glow object
     public GameObject prefabCarte;
     public TestMvtSurCases playerScript;
-    public TextMeshProUGUI affichageRolls;
+    public TextMeshProUGUI affichageRolls, affichageTurn;
+    public GameSettingsScriptableObject gameSettings;
 
     //RectTransform[][] rtrCartes = new RectTransform[2][];
     //RectTransform[,] rtrCartes = new RectTransform[5, 2];
@@ -24,6 +24,7 @@ public class TestCardHandler : MonoBehaviour
     bool moveSelector = false;
     public bool allowInput = true;
     List<int> shuffledCardValues = new List<int>();
+    int playerTurn = 0;
 
     /// <summary>
     /// Enum for the type of step used in <c>MoveTowards()</c>
@@ -61,7 +62,7 @@ public class TestCardHandler : MonoBehaviour
         rtrSelector.anchoredPosition = rtrCartes[selectorPos].anchoredPosition;
         selector.SetActive(true);
 
-        //print(playerScript);
+        //Debug.Log(playerScript);
         playerScript.allowInput = false;
         ShuffleCards(shuffledCardValues);
     }
@@ -72,32 +73,34 @@ public class TestCardHandler : MonoBehaviour
         if (allowInput)
         {
             // mouvement selecteur
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.right))
             {
-                Debug.Log("Going right");
+                Debug.Log("Right control");
                 //moveSelector = true;
                 //allowInput = false;
                 //MoveUI(rtrSelector.anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, MoveTowardsSpeedType.Time, 2);
                 MoveSelector(1);
             }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.left))
             {
-                Debug.Log("Going left");
+                Debug.Log("Left control");
                 MoveSelector(1, reverse: true);
             }
-            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.up))
             {
-                Debug.Log("Going up");
+                Debug.Log("Up control");
                 MoveSelector((int)Math.Ceiling(halvedLength), reverse: true);
             }
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.down))
             {
-                Debug.Log("Going down");
+                Debug.Log("Down control");
                 MoveSelector((int)Math.Ceiling(halvedLength));
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.action))
             {
+                // affectations valeur
+                Debug.Log("Action control");
                 affichageRolls.text = "Roll: " + shuffledCardValues[selectorPos];
                 Debug.Log("shuffledCardValue selected: " + shuffledCardValues[selectorPos]);
                 playerScript.caseIncrease = Math.Abs(shuffledCardValues[selectorPos]);
@@ -110,36 +113,42 @@ public class TestCardHandler : MonoBehaviour
                 {
                     playerScript.comparaisonType = ComparaisonType.GreaterThanOrEqualTo;
                 }
+
+                // animation mouvement player
                 //playerScript.allowInput = true;
                 playerScript.AvancePlayer();
                 allowInput = false;
 
+                // suppressions/desactivations
                 Destroy(rtrCartes[selectorPos].gameObject);
                 rtrCartes.RemoveAt(selectorPos);
                 shuffledCardValues.RemoveAt(selectorPos);
                 parentListeCarte.SetActive(false);
 
+                // reinitialisation/mise a jour certaines valeurs
                 if (rtrCartes.Count == 0)
                 {
+                    // reconstruction donnees iterables
                     selector.SetActive(false);
                     for (int i = 0; i < 10; i++)
                     {
                         GameObject instanceCarte = Instantiate(prefabCarte, parentListeCarte.GetComponent<RectTransform>());
                         instanceCarte.name += $"_{i}";
                     }
-                    print(parentListeCarte.transform.childCount);
+                    //Debug.Log(parentListeCarte.transform.childCount);
                     rtrCartes = new List<RectTransform>(parentListeCarte.GetComponentsInChildren<RectTransform>()[2..]);
-                    print(rtrCartes.Count);
+                    //Debug.Log(rtrCartes.Count);
                     selector.SetActive(true);
                     ShuffleCards(shuffledCardValues);
                 }
-                //else
-                //{
                 halvedLength = (rtrCartes.Count) / 2f;
                 PositionCards(rtrCartes);
                 selectorPos = 0;
                 rtrSelector.anchoredPosition = rtrCartes[selectorPos].anchoredPosition;
-                //}
+
+                playerTurn = CheckForResetLoop(playerTurn + 1, gameSettings.Players.Length);
+                //Debug.Log("Player turn: " + playerTurn);
+                affichageTurn.text = "Player turn: " + (playerTurn + 1);
             }
         }
 
@@ -197,20 +206,20 @@ public class TestCardHandler : MonoBehaviour
     /// <param name="reverse">Whether to reverse the movement direction or not (direction).</param>
     void MoveSelector(int moveIndicator, ComparaisonType comparaison = ComparaisonType.GreaterThan, bool reverse = false)
     {
-        print(moveIndicator);
+        Debug.Log(moveIndicator);
         int start = selectorPos;
-        //print(reverse);
+        //Debug.Log(reverse);
         if (reverse && (int)comparaison > 0)
         {
             comparaison = (ComparaisonType)(-(int)comparaison);
         }
-        //print(comparaison);
+        //Debug.Log(comparaison);
 
         int end = CheckForLoopback(selectorPos, rtrCartes.Count - 1, moveIndicator, comparaison: comparaison, reverse: reverse);
-        print($"start: {start}, end: {end}");
+        Debug.Log($"start: {start}, end: {end}");
         rtrSelector.anchoredPosition = rtrCartes[end].anchoredPosition;
         selectorPos = end;
-        //print(rtrSelector.anchoredPosition);
+        //Debug.Log(rtrSelector.anchoredPosition);
     }
 
     /// <summary>
@@ -313,7 +322,7 @@ public class TestCardHandler : MonoBehaviour
     /// <param name="values">List of card values to shuffle.</param>
     void ShuffleCards(List<int> values)
     {
-        for (int i = 0; i < values.Count; i++)
+        for (int i = 0; i < 10; i++)
         {
             values.Add(Random.Range(-7, 7));
         }
