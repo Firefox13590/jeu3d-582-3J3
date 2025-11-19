@@ -9,7 +9,7 @@ public class TestCardSpinning : MonoBehaviour
 
     RectTransform[] rtrCardList;
     float[] vitessesRotationRandom;
-    TestGlowOnHover glowScript;
+    //TestGlowOnHover glowScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

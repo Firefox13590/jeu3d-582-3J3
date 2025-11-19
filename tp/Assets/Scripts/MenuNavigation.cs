@@ -24,12 +24,6 @@ public class MenuNavigation : MonoBehaviour
         GoToMenu(menuCible);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void GoToMenu(int targetMenuIndex)
     {
         menuCible = targetMenuIndex;

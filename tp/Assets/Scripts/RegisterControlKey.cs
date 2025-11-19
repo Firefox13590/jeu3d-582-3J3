@@ -7,35 +7,14 @@ public class RegisterControlKey : MonoBehaviour
     public GameObject panelRegisterControlKey;
 
     bool isListeningKey = false;
-    TextMeshProUGUI textControle;
+    public TextMeshProUGUI textControle;
     public KeyCode registeredKey = KeyCode.None;
 
     public static event Action<int, string, KeyCode> OnControlKeyRegistered;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         textControle = GetComponentInChildren<TextMeshProUGUI>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //if(isListeningKey)
-        //{
-        //    if(Input.anyKeyDown)
-        //    {
-        //        Debug.Log(Input.inputString);
-        //        foreach(KeyCode kcode in System.Enum.GetValues(typeof(KeyCode)))
-        //        {
-        //            if(Input.GetKeyDown(kcode))
-        //            {
-        //                textControle.text = kcode.ToString();
-        //                isListeningKey = false;
-        //                panelRegisterControlKey.SetActive(false);
-        //            }
-        //        }
-        //    }
-        //}
     }
 
     public void DisplayPanel()
@@ -61,8 +40,8 @@ public class RegisterControlKey : MonoBehaviour
                 panelRegisterControlKey.SetActive(false);
 
                 // decomposer le return tuple pour invoquer event
-                var (arg0, arg1) = GetMissingEventParameters();
-                OnControlKeyRegistered?.Invoke(arg0, arg1, e.keyCode);
+                var (indexPlayer, nomControle) = GetMissingEventParameters();
+                OnControlKeyRegistered?.Invoke(indexPlayer, nomControle, e.keyCode);
             }
         }
     }
@@ -72,8 +51,7 @@ public class RegisterControlKey : MonoBehaviour
         int indexPlayer;
         string nomControle = gameObject.name.Split('_')[1];
 
-        indexPlayer = 0;
-        Debug.Log(GetComponentsInParent<RectTransform>()[2].gameObject.name.Split('_')[1]);
+        indexPlayer = Int32.Parse(GetComponentsInParent<RectTransform>()[2].gameObject.name.Split('_')[1]);
 
         return (indexPlayer, nomControle);
     }

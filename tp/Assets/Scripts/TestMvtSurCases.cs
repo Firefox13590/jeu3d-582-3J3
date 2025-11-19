@@ -29,16 +29,6 @@ public class TestMvtSurCases : MonoBehaviour
         //print("caseIncrease: " + caseIncrease + "    reverse: " + reverseArrayCheck);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Space) && allowInput)
-        //{
-        //    currentPos = CalculAvanceCase(currentPos, caseIncrease, trCaseList);
-        //    allowInput = false;
-        //}
-    }
-
     /// <summary>
     /// Calculates player movement across tiles.
     /// </summary>

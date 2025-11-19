@@ -13,7 +13,7 @@ namespace Lib.Globals
         public KeyCode down;
         public KeyCode left;
         public KeyCode action;
-        public readonly KeyCode[] allControls
+        public readonly KeyCode[] AllControls
         {
             get
             {

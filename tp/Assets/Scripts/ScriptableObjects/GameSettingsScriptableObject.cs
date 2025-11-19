@@ -11,7 +11,7 @@ public class GameSettingsScriptableObject : ScriptableObject
     public Player player3 = new();
     public Player player4 = new();
 
-    public Player[] players
+    public Player[] Players
     {
         get
         {
