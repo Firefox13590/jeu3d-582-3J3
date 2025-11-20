@@ -4,32 +4,33 @@ using System;
 
 namespace Lib.Entities
 {
+    [Serializable]
     public class Entity
     {
-        public readonly string name;
+        public string Name { get; private set; }
 
         public Entity(string name)
         {
-            this.name = name;
+            Name = name;
         }
     }
 
     [Serializable]
     public class Player : Entity
     {
-        public Controls controls;
+        public Controls Controls {  get; private set; }
 
         public Player() : base("Player")
         {
-            this.controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return);
+            Controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return);
         }
         public Player(Controls controls) : base("Player")
         {
-            this.controls = controls;
+            Controls = controls;
         }
         public Player(string name, Controls controls) : base(name)
         {
-            this.controls = controls;
+            Controls = controls;
         }
     }
 }

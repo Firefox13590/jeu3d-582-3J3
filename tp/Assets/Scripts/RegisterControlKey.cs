@@ -35,7 +35,7 @@ public class RegisterControlKey : MonoBehaviour
                     textControle.text = e.keyCode.ToString();
                     registeredKey = e.keyCode;
                 }
-                Debug.Log("Detected key code: " + e.keyCode);
+                //Debug.Log("Detected key code: " + e.keyCode);
                 isListeningKey = false;
                 panelRegisterControlKey.SetActive(false);
 

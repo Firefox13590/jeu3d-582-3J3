@@ -73,7 +73,7 @@ public class TestCardHandler : MonoBehaviour
         if (allowInput)
         {
             // mouvement selecteur
-            if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.right))
+            if (Input.GetKeyDown(gameSettings.Players[playerTurn].Controls.Right))
             {
                 Debug.Log("Right control");
                 //moveSelector = true;
@@ -81,23 +81,23 @@ public class TestCardHandler : MonoBehaviour
                 //MoveUI(rtrSelector.anchoredPosition, rtrCartes[ArrayMovement.CheckForResetLoop(selectorPos + 1, rtrCartes.Count - 1)].anchoredPosition, MoveTowardsSpeedType.Time, 2);
                 MoveSelector(1);
             }
-            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.left))
+            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].Controls.Left))
             {
                 Debug.Log("Left control");
                 MoveSelector(1, reverse: true);
             }
-            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.up))
+            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].Controls.Up))
             {
                 Debug.Log("Up control");
                 MoveSelector((int)Math.Ceiling(halvedLength), reverse: true);
             }
-            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.down))
+            else if (Input.GetKeyDown(gameSettings.Players[playerTurn].Controls.Down))
             {
                 Debug.Log("Down control");
                 MoveSelector((int)Math.Ceiling(halvedLength));
             }
 
-            if (Input.GetKeyDown(gameSettings.Players[playerTurn].controls.action))
+            if (Input.GetKeyDown(gameSettings.Players[playerTurn].Controls.Action))
             {
                 // affectations valeur
                 Debug.Log("Action control");
