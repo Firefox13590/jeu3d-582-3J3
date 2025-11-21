@@ -6,11 +6,11 @@ namespace Lib.Globals
     [Serializable]
     public struct Controls
     {
-        public KeyCode Up { get; private set; }
-        public KeyCode Right { get; private set; }
-        public KeyCode Down { get; private set; }
-        public KeyCode Left { get; private set; }
-        public KeyCode Action { get; private set; }
+        public KeyCode Up { get; set; }
+        public KeyCode Right { get; set; }
+        public KeyCode Down { get; set; }
+        public KeyCode Left { get; set; }
+        public KeyCode Action { get; set; }
         public readonly KeyCode[] AllControls
         {
             get

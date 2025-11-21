@@ -7,7 +7,7 @@ namespace Lib.Entities
     [Serializable]
     public class Entity
     {
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         public Entity(string name)
         {
@@ -18,7 +18,7 @@ namespace Lib.Entities
     [Serializable]
     public class Player : Entity
     {
-        public Controls Controls {  get; private set; }
+        public Controls Controls {  get; set; }
 
         public Player() : base("Player")
         {

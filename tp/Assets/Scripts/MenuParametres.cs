@@ -34,10 +34,11 @@ public class MenuParametres : MonoBehaviour
         if (propinfoControle != null )
         {
             propinfoControle.SetValue(gameSettings.Players[indexPlayer].Controls, key);
+            Debug.Log(propinfoControle.GetValue(gameSettings.Players[indexPlayer].Controls));
         }
         else
         {
-            Debug.Log("Cant set value");
+            Debug.LogError("Cant set property value");
         }
     }
 
