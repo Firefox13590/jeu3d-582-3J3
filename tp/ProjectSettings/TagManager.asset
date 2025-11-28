@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Carte
   - ConteneurControlesPlayer
+  - Case
   layers:
   - Default
   - TransparentFX
