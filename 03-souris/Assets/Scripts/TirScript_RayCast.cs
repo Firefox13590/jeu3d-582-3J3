@@ -93,6 +93,11 @@ public class TirScript_RayCast : MonoBehaviour
 
             boutDuFusil.GetComponent<LineRenderer>().enabled = true;
             boutDuFusil.GetComponent<LineRenderer>().SetPosition(1, hit.transform.position);
+
+            if(hit.transform.gameObject.CompareTag("Enemy"))
+            {
+                hit.transform.gameObject.GetComponent<Monstre>().Touche();
+            }
         }
     }
     //----------------------------------------------------------------------------------------------

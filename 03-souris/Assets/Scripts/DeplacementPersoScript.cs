@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class DeplacementPersoScript : MonoBehaviour
 {
@@ -14,7 +16,10 @@ public class DeplacementPersoScript : MonoBehaviour
     public float vitesseRotationPerso;// vitesse de rotation du personnage lorsque la souris se déplace horizontalement
     public bool curseurLock; // On vérouille ou non le curseur.
 
-   
+
+    // pointage
+    public static int pointage;
+    public TextMeshProUGUI textePointage;
 
     void Start()
     {
@@ -125,5 +130,24 @@ public class DeplacementPersoScript : MonoBehaviour
         }
         //outil de déboggage pour visualiser le rayon dans l'onglet scene
         Debug.DrawRay(camRay.origin, camRay.direction * 100, Color.yellow);   
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            GetComponent<Animator>().SetBool("isDead", true);
+            GestionScenes.isInGame = false;
+            vitesseDeplacementPerso = 0;
+            vitesseRotationPerso = 0;
+            this.enabled = false;
+
+            Invoke(nameof(AfficherSceneFinale), 5);
+        }
+    }
+
+    void AfficherSceneFinale()
+    {
+        SceneManager.LoadScene(2);
     }
 }
