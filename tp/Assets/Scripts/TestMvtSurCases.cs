@@ -20,6 +20,13 @@ public class TestMvtSurCases : MonoBehaviour
     {
         // recuperer liste case (avec parent empty)
         trCaseList = caseList.GetComponentsInChildren<Transform>();
+        var listeTest = GameObject.FindGameObjectsWithTag("Case");
+        Debug.Log("listeTest length: " + listeTest.Length);
+        for (int i = 0; i < listeTest.Length; i++)
+        {
+            Debug.Log($"nom element {i} du array listeTest: {listeTest[i].name}");
+        }
+
         // enlever premier element (parent empty) avec spread operator
         // change valeurs du array pour commencer a l'index 1 (seulement les cases)
         trCaseList = trCaseList[1..];
