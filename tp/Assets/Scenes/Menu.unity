@@ -3424,7 +3424,7 @@ MonoBehaviour:
   - {fileID: 840501119}
   - {fileID: 1010519396}
   - {fileID: 1160116954}
-  menuCible: 0
+  menuCible: 1
 --- !u!1 &885875475
 GameObject:
   m_ObjectHideFlags: 0
@@ -4698,7 +4698,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9035810629900245276}
   - component: {fileID: 5281058519114177280}
   - component: {fileID: 9062106505904441479}
+  - component: {fileID: 9211674030755955945}
   m_Layer: 0
   m_Name: Case
   m_TagString: Case
@@ -89,3 +90,15 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &9211674030755955945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7411090095897973668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 818ce85fa8266354f88b8e965b542c48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Case

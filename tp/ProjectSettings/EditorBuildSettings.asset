@@ -11,15 +11,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: 767904e1e979d3d4295b960b8295a18a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SelectionMonde.unity
     guid: 27b3ef758753cce4ba2f481e63390399
   - enabled: 0
     path: Assets/Scenes/TestCanvas.unity
     guid: 5d6a07760d381924ebb44a3dc66dffc0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestPlayerAndCards.unity
     guid: 7f1521cd20a142a449678a6b69c6d893
+  - enabled: 1
+    path: Assets/Scenes/Ben's Burg.unity
+    guid: 2bee605be6b7f864b8fac1e3448e1b81
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
