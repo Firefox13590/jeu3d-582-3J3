@@ -3,6 +3,7 @@ using UnityEngine;
 public class CameraPlayer : MonoBehaviour
 {
     public GameObject[] players = new GameObject[4];
+    [Range(0, 3)]
     public int playerTarget;
     public Vector3 ajustement;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

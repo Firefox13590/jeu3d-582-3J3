@@ -11,7 +11,6 @@ public class RegisterControlKey : MonoBehaviour
     public KeyCode registeredKey = KeyCode.None;
 
     public static event Action<int, string, KeyCode> OnControlKeyRegistered;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         textControle = GetComponentInChildren<TextMeshProUGUI>();
