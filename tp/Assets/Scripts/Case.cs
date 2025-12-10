@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Case : MonoBehaviour
 {
-    public bool offreChoix = false;
+    public bool changementChemin = false;
     public Transform[] optionsCase;
 
     public int indexCase;
@@ -13,9 +13,11 @@ public class Case : MonoBehaviour
         indexCase = Int32.Parse(name[5..]);
     }
 
-    // Update is called once per frame
-    void Update()
+    void GiveTileChoice()
     {
-        
+        foreach(Transform option in optionsCase)
+        {
+            Debug.Log(option.name);
+        }
     }
 }

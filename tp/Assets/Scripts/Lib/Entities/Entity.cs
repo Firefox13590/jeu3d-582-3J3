@@ -7,7 +7,14 @@ namespace Lib.Entities
     [Serializable]
     public class Entity
     {
+        private int currentPos = 0;
+
         public string Name { get; set; }
+        public int CurrentPos
+        {
+            get { return currentPos; }
+            set { currentPos = value; }
+        }
 
         public Entity(string name)
         {
@@ -18,7 +25,7 @@ namespace Lib.Entities
     [Serializable]
     public class Player : Entity
     {
-        public Controls Controls {  get; set; }
+        public Controls Controls { get; set; }
 
         public Player() : base("Player")
         {
