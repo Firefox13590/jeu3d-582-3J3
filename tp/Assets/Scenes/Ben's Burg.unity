@@ -6599,7 +6599,6 @@ MonoBehaviour:
   - {fileID: 1604035667}
   - {fileID: 587044320}
   - {fileID: 877601170}
-  playerTarget: 0
   ajustement: {x: -10, y: 5, z: -10}
 --- !u!1001 &1260325154
 PrefabInstance:
@@ -11362,7 +11361,7 @@ MonoBehaviour:
   - {fileID: 1604035667}
   - {fileID: 587044320}
   - {fileID: 877601170}
-  gameloop: {fileID: 25559777}
+  playerPosAjust: {x: 0, y: 1, z: 0}
 --- !u!1001 &2015512877
 PrefabInstance:
   m_ObjectHideFlags: 0

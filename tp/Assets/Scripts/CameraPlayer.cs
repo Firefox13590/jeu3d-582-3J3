@@ -3,8 +3,6 @@ using UnityEngine;
 public class CameraPlayer : MonoBehaviour
 {
     public GameObject[] players = new GameObject[4];
-    [Range(0, 3)]
-    public int playerTarget;
     public Vector3 ajustement;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,7 +13,7 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = players[playerTarget].transform.position + ajustement;
-        transform.LookAt(players[playerTarget].transform.position);
+        transform.position = players[GameLoop.playerTurn].transform.position + ajustement;
+        transform.LookAt(players[GameLoop.playerTurn].transform.position);
     }
 }
