@@ -21,6 +21,11 @@ public class GameManager : MonoBehaviour
         Case.OnTileChoice += DisplayTileChoiceText;
     }
 
+    private void OnDestroy()
+    {
+        Case.OnTileChoice -= DisplayTileChoiceText;
+    }
+
 
 
     void DisplayTileChoiceText(Transform[] _)

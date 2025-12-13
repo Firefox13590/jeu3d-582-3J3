@@ -6,17 +6,19 @@ using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //valeurs a ajuster dans l'inspecteur
+    [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
     public GameObject[] playerObjects = new GameObject[4];
     public Vector3 playerPosAjust = Vector3.zero;
 
+    [Header("Acces publique pour autres scripts")]
+    public Vector3 targetPos = Vector3.zero;
 
     GameObject[] listeCases;
     Vector3[] listeCasesPos;
     int rngMvt, movesLeft;
     bool allowInput = true, allowMove = false;
-    List<Vector3> listeEndPos = new List<Vector3>();
+    List<Vector3> listeEndPos = new();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -100,7 +102,10 @@ public class PlayerMovement : MonoBehaviour
 
             if(movesLeft > 0)
             {
-                Vector3 targetPos = listeCases[gameSettings.Players[GameManager.playerTurn].CurrentPos + 1].transform.position + playerPosAjust;
+                if(targetPos == Vector3.zero)
+                {
+                    targetPos = listeCases[gameSettings.Players[GameManager.playerTurn].CurrentPos + 1].transform.position + playerPosAjust;
+                }
                 float distance = Vector3.Distance(playerObjects[GameManager.playerTurn].transform.position, targetPos);
 
                 if(distance > 0)
@@ -113,6 +118,7 @@ public class PlayerMovement : MonoBehaviour
                     //Debug.Log($"new CurrentPos: {gameSettings.Players[GameManager.playerTurn].CurrentPos}    Vector3: {playerObjects[GameManager.playerTurn].transform.position}");s
                     movesLeft--;
                     //Debug.Log("current moves left: " + movesLeft);
+                    targetPos = Vector3.zero;
                 }
             }
             else
