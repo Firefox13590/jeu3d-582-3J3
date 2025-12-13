@@ -13,7 +13,7 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = players[GameLoop.playerTurn].transform.position + ajustement;
-        transform.LookAt(players[GameLoop.playerTurn].transform.position);
+        transform.position = players[GameManager.playerTurn].transform.position + ajustement;
+        transform.LookAt(players[GameManager.playerTurn].transform.position);
     }
 }

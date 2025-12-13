@@ -3,21 +3,24 @@ using UnityEngine;
 
 public class Case : MonoBehaviour
 {
-    public bool changementChemin = false;
+    public bool choixChemin = false;
     public Transform[] optionsCase;
+    public Transform forceProchaineCase;
 
     public int indexCase;
+
+    public static event Action<Transform[]> OnTileChoice;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         indexCase = Int32.Parse(name[5..]);
     }
 
-    void GiveTileChoice()
+    private void OnTriggerEnter(Collider other)
     {
-        foreach(Transform option in optionsCase)
+        if (choixChemin && other.gameObject.CompareTag("Player"))
         {
-            Debug.Log(option.name);
+            OnTileChoice.Invoke(optionsCase);
         }
     }
 }
