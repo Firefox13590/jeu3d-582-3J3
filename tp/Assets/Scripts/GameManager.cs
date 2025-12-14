@@ -6,12 +6,15 @@ using Lib;
 public class GameManager : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
-    public TextMeshProUGUI popupTileChoice;
+    public GameObject popupTileChoice;
     public GameSettingsScriptableObject gameSettings;
     public PlayerControls playerControls;
     public GameObject[] tileChoiceiIndocators = new GameObject[2];
 
-    // variables
+    [Header("Acces publique pour autres scripts")]
+    public Transform[] tileChoice;
+
+    // variables statiques
     public static int playerTurn = 0;
 
     private void Awake()
@@ -21,13 +24,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Case.OnTileChoice += DisplayTileChoiceText;
+        Case.OnTileChoiceStart += DisplayTileChoiceText;
         PlayerControls.OnTurnEnd += UpdatePlayerTurn;
     }
 
     private void OnDestroy()
     {
-        Case.OnTileChoice -= DisplayTileChoiceText;
+        Case.OnTileChoiceStart -= DisplayTileChoiceText;
         PlayerControls.OnTurnEnd -= UpdatePlayerTurn;
     }
 
@@ -35,10 +38,12 @@ public class GameManager : MonoBehaviour
 
     void DisplayTileChoiceText(Transform[] options)
     {
-        popupTileChoice.gameObject.SetActive(true);
+        tileChoice = options;
+        popupTileChoice.SetActive(true);
+
         for(int i = 0; i < options.Length; i++)
         {
-            tileChoiceiIndocators[i].transform.position = options[i].transform.position + new Vector3(0, 10, 0);
+            tileChoiceiIndocators[i].transform.position = options[i].transform.position + new Vector3(0, 10);
             tileChoiceiIndocators[i].SetActive(true);
         }
     }

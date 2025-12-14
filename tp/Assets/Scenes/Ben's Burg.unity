@@ -270,12 +270,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 595f5c3914f74b64785e83191ba9b208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameLoop
-  popupTileChoice: {fileID: 2053252794}
+  popupTileChoice: {fileID: 2053252792}
   gameSettings: {fileID: 11400000, guid: 6bd18b2706f46d2479b685db9e8254ff, type: 2}
-  playerMovement: {fileID: 2010926726}
+  playerControls: {fileID: 0}
   tileChoiceiIndocators:
   - {fileID: 1364414957}
   - {fileID: 1639441258}
+  tileChoice: []
 --- !u!1001 &38288703
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11352,7 +11353,10 @@ MonoBehaviour:
   - {fileID: 530023426}
   - {fileID: 1002507204}
   playerPosAjust: {x: 0, y: 1, z: 0}
+  gameManager: {fileID: 25559777}
+  testCurrentPos: 30
   targetPos: {x: 0, y: 0, z: 0}
+  allowTileChoice: 0
 --- !u!1001 &2015512877
 PrefabInstance:
   m_ObjectHideFlags: 0

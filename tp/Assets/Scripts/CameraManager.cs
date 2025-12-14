@@ -8,14 +8,14 @@ public class CameraManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Case.OnTileChoice += SetCameraChoixCase;
+        Case.OnTileChoiceStart += SetCameraChoixCase;
 
         UpdateActiveCamera();
     }
 
     private void OnDestroy()
     {
-        Case.OnTileChoice -= SetCameraChoixCase;
+        Case.OnTileChoiceStart -= SetCameraChoixCase;
     }
 
 
@@ -45,9 +45,11 @@ public class CameraManager : MonoBehaviour
         setCameraiIndex = 1;
         UpdateActiveCamera();
     }
-    void SetCameraChoixCase(Transform[] _)
+    void SetCameraChoixCase(Transform[] options)
     {
         setCameraiIndex = 2;
+        //Cameras[2].transform.position = options[0].position + options[1].position + new Vector3(-5, 10);
+        Cameras[2].transform.position = Vector3.Lerp(options[0].position, options[1].position, .5f) + new Vector3(-5, 10);
         UpdateActiveCamera();
     }
 }

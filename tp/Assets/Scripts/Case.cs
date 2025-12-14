@@ -11,7 +11,7 @@ public class Case : MonoBehaviour
     [Header("Acces publique pour autres scripts")]
     public int indexCase;
 
-    public static event Action<Transform[]> OnTileChoice;
+    public static event Action<Transform[]> OnTileChoiceStart;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,7 +22,7 @@ public class Case : MonoBehaviour
     {
         if (choixChemin && other.gameObject.CompareTag("Player"))
         {
-            OnTileChoice.Invoke(optionsCase);
+            OnTileChoiceStart.Invoke(optionsCase);
         }
     }
 }
