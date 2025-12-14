@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class Case : MonoBehaviour
 {
+    [Header("Valeurs a ajuster dans l'inspecteur")]
     public bool choixChemin = false;
     public Transform[] optionsCase;
     public Transform forceProchaineCase;
 
+    [Header("Acces publique pour autres scripts")]
     public int indexCase;
 
     public static event Action<Transform[]> OnTileChoice;

@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 using Lib;
 using System.Collections.Generic;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerControls : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
     int rngMvt, movesLeft;
     bool allowInput = true, allowMove = false;
     List<Vector3> listeEndPos = new();
+
+    //events
+    public static event Action OnTurnEnd;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -123,6 +126,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
+                //OnTurnEnd.Invoke();
+
                 allowMove = false;
                 allowInput = true;
             }
@@ -135,8 +140,8 @@ public class PlayerMovement : MonoBehaviour
 
         foreach(Transform option in options)
         {
-            Debug.Log(option.name);
+            Debug.Log($"pos {option.name}: {option.position}");
         }
-        enabled = false;
+        Debug.Log($"somme des {options.Length} pos: {options[0].position + options[1].position}");
     }
 }
