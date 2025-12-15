@@ -6,7 +6,7 @@ namespace Lib
     public static class ArrayMovement
     {
         /// <summary>
-        /// Enum representing the type of comparison to perform.
+        /// Enum représentant les types de comparaisons possibles.
         /// </summary>
         public enum ComparaisonType
         {
@@ -18,14 +18,16 @@ namespace Lib
         }
 
         /// <summary>
-        /// Checks whether the specified value exceeds the maximum limit and resets it if necessary.
+        /// Vérifie si une valeur dépasse une limite maximale ou minimale et la réinitialise en conséquence.
         /// </summary>
-        /// <param name="value">The value to check against the limit.</param>
-        /// <param name="max">The maximum allowable value (or last array index).</param>
-        /// <param name="min">The minimum allowable value (or first array index). Defaults to 0.</param>
-        /// <param name="comparaison">An enum representing comparaison rule when checking. Defaults to <c>ComparaisonType.GreaterThanOrEqualTo</c></param>
-        /// <param name="reverse">Determines if checking has to be done in reverse (checking agaisnt min instead of max). Defaults to false.</param>
-        /// <returns><paramref name="value"/> if it does not exceed <paramref name="max"/> or <paramref name="min"/> limits.</returns>
+        /// 
+        /// <param name="value">La valeur à vérifier.</param>
+        /// <param name="max">La valeur maximale permise (ou fin du tableau).</param>
+        /// <param name="min">La valeur minimale permise (ou début du tableau). <c>0</c> par défaut.</param>
+        /// <param name="comparaison">La règle de comparaison. <c>ComparaisonType.GreaterThanOrEqualTo</c> par défaut.</param>
+        /// <param name="reverse">Détermine si la vérification doit être effectuée à l'envers (vérification contre min au lieu de max). <c>false</c> par défaut.</param>
+        /// 
+        /// <returns><paramref name="value"/> si elle ne dépasse pas les limites <paramref name="max"/> ou <paramref name="min"/>, sinon retourne les limites.</returns>
         public static int CheckForResetLoop(int value, int max, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThanOrEqualTo, bool reverse = false)
         {
             //Debug.Log($"value: {value}, max: {max}");
@@ -69,15 +71,17 @@ namespace Lib
         }
 
         /// <summary>
-        /// Loops method <c>CheckForLoopback()</c> for a number of iterations.
+        /// Itère la méthode <c>CheckForLoopback()</c> pour un nombre d'itérations.
         /// </summary>
-        /// <param name="baseValue">Base value before starting loop</param>
-        /// <param name="max">The maximum allowable value (or last array index).</param>
-        /// <param name="iterations">Number of iterations to perform.</param>
-        /// <param name="min">The minimum allowable value (or first array index). Defaults to 0.</param>
-        /// <param name="comparaison">An enum representing comparaison rule when checking. Defaults to <c>ComparaisonType.GreaterThanOrEqualTo</c></param>
-        /// <param name="reverse">Determines if checking has to be done in reverse (checking agaisnt min instead of max). Defaults to false.</param>
-        /// <returns>Output of <c>CheckForLoopback()</c> after <paramref name="iterations"/> iterations.</returns>
+        /// 
+        /// <param name="baseValue">La valeur de base avant de commencer l'itération.</param>
+        /// <param name="max">La valeur maximale permise (ou fin du tableau).</param>
+        /// <param name="iterations">Le nombre d'itérations à faire.</param>
+        /// <param name="min">La valeur minimale permise (ou début du tableau). <c>0</c> par défaut.</param>
+        /// <param name="comparaison">La règle de comparaison. <c>ComparaisonType.GreaterThan</c> par défaut.</param>
+        /// <param name="reverse">Détermine si la vérification doit être effectuée à l'envers (vérification contre min au lieu de max). <c>false</c> par défaut.</param>
+        /// 
+        /// <returns>Sortie de <c>CheckForLoopback()</c> après <paramref name="iterations"/> itérations.</returns>
         public static int CheckForLoopback(int baseValue, int max, int iterations, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThan, bool reverse = false)
         {
             for(int i = iterations; i > 0; i--)

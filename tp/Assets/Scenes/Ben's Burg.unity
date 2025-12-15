@@ -3395,6 +3395,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9211674030755955945, guid: cb99b7ebf86a7cf47a0414202be4ab71, type: 3}
+      propertyPath: forceChemin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211674030755955945, guid: cb99b7ebf86a7cf47a0414202be4ab71, type: 3}
       propertyPath: changementChemin
       value: 1
       objectReference: {fileID: 0}
@@ -9488,6 +9492,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9211674030755955945, guid: cb99b7ebf86a7cf47a0414202be4ab71, type: 3}
+      propertyPath: forceChemin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211674030755955945, guid: cb99b7ebf86a7cf47a0414202be4ab71, type: 3}
       propertyPath: changementChemin
       value: 1
       objectReference: {fileID: 0}
@@ -11356,6 +11364,7 @@ MonoBehaviour:
   gameManager: {fileID: 25559777}
   testCurrentPos: 30
   targetPos: {x: 0, y: 0, z: 0}
+  plannedRedirect: {x: 0, y: 0, z: 0}
   allowTileChoice: 0
 --- !u!1001 &2015512877
 PrefabInstance:
@@ -11721,6 +11730,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9211674030755955945, guid: cb99b7ebf86a7cf47a0414202be4ab71, type: 3}
       propertyPath: offreChoix
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9211674030755955945, guid: cb99b7ebf86a7cf47a0414202be4ab71, type: 3}
+      propertyPath: forceChemin
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9211674030755955945, guid: cb99b7ebf86a7cf47a0414202be4ab71, type: 3}

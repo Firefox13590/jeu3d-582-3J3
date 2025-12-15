@@ -6,6 +6,7 @@ using Lib.Globals;
 
 public class MenuParametres : MonoBehaviour
 {
+    [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
 
     GameObject[] conteneursControlesPlayer;
@@ -14,20 +15,29 @@ public class MenuParametres : MonoBehaviour
     {
         InitDefaultPlayerControls();
 
+        // abonnement aux évènements
         RegisterControlKey.OnControlKeyRegistered += UpdateControlsKey;
     }
 
     void OnDestroy()
     {
+        // désabonnement aux évènements
         RegisterControlKey.OnControlKeyRegistered -= UpdateControlsKey;
     }
 
 
 
+    /// <summary>
+    /// Met à jour la touche d'un contrôle pour un joueur donné.
+    /// </summary>
+    /// <param name="indexPlayer">Index du joueur dont on souhaite mettre à jour le contrôle.</param>
+    /// <param name="nomControle">Nom du contrôle à mettre à jour.</param>
+    /// <param name="key">Nouvelle touche à assigner au contrôle.</param>
     void UpdateControlsKey(int indexPlayer, string nomControle, KeyCode key)
     {
         Debug.Log($"Event output (int, string, KeyCode): {indexPlayer}    {nomControle}    {key}");
 
+        // Utilisation de la réflexion pour accéder dynamiquement à la propriété du contrôle
         Type typePlayer = typeof(Controls);
         PropertyInfo propinfoControle = typePlayer.GetProperty(nomControle);
         Debug.Log($"Type: {typePlayer}    PropertyInfo: {propinfoControle.Name}");
@@ -42,6 +52,9 @@ public class MenuParametres : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initialise les contrôles des joueurs avec les valeurs par défaut.
+    /// </summary>
     void InitDefaultPlayerControls()
     {
         //Debug.Log(gameSettings.Players.Length);

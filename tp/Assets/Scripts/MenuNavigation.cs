@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuNavigation : MonoBehaviour
 {
+    [Header("Valeurs a ajuster dans l'inspecteur")]
     public RectTransform[] listeMenus;
     [Range(0, 2)]
     public int menuCible = 1;
@@ -24,6 +25,12 @@ public class MenuNavigation : MonoBehaviour
         GoToMenu(menuCible);
     }
 
+
+
+    /// <summary>
+    /// Gère la navigation entre les menus.
+    /// </summary>
+    /// <param name="targetMenuIndex">L'index du menu cible</param>
     public void GoToMenu(int targetMenuIndex)
     {
         menuCible = targetMenuIndex;
@@ -37,6 +44,10 @@ public class MenuNavigation : MonoBehaviour
         menuActuel = menuCible;
     }
 
+    /// <summary>
+    /// Charge une scène en fonction de son index.
+    /// </summary>
+    /// <param name="sceneIndex">Index de la scène à charger</param>
     public void LoadScene(int sceneIndex)
     {
         SceneManager.LoadScene(sceneIndex);

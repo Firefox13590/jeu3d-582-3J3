@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     [Header("Acces publique pour autres scripts")]
     public Transform[] tileChoice;
 
-    // variables statiques
+    // variables publiques statiques
     public static int playerTurn = 0;
 
     private void Awake()
@@ -24,19 +24,25 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Case.OnTileChoiceStart += DisplayTileChoiceText;
+        // abonnement aux évènements
+        Case.OnTileChoiceStart += DisplayTileChoice;
         PlayerControls.OnTurnEnd += UpdatePlayerTurn;
     }
 
     private void OnDestroy()
     {
-        Case.OnTileChoiceStart -= DisplayTileChoiceText;
+        // désabonnement aux évènements
+        Case.OnTileChoiceStart -= DisplayTileChoice;
         PlayerControls.OnTurnEnd -= UpdatePlayerTurn;
     }
 
 
 
-    void DisplayTileChoiceText(Transform[] options)
+    /// <summary>
+    /// Fait apparaitre le popup de choix de case.
+    /// </summary>
+    /// <param name="options">Les options de case</param>
+    void DisplayTileChoice(Transform[] options)
     {
         tileChoice = options;
         popupTileChoice.SetActive(true);
@@ -48,6 +54,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Change l'ordre du tour des joueurs.
+    /// </summary>
     void UpdatePlayerTurn()
     {
         playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, 4);

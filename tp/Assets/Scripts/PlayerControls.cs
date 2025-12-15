@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using Lib;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class PlayerControls : MonoBehaviour
 {
@@ -17,19 +14,23 @@ public class PlayerControls : MonoBehaviour
     public int testCurrentPos = 0;
 
     [Header("Acces publique pour autres scripts")]
-    public Vector3 targetPos = Vector3.zero;
+    public Vector3 targetPos = Vector3.zero, plannedRedirect = Vector3.zero;
     public bool allowTileChoice = false;
 
+    // variables privées
     GameObject[] listeCases;
     int movesLeft;
-    bool allowInput = true, allowMove = false;
+    bool allowInput = true, allowMove = false; // gestion des permissions
 
-    //events
+    // événements statiques
     public static event Action OnTurnEnd;
+    public static event Action OnTileChoiceEnd;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // abonnement aux évènements
         Case.OnTileChoiceStart += StartTileSelection;
+        Case.OnTileRedirect += TileRedirect;
 
         listeCases = GameObject.FindGameObjectsWithTag("Case");
         Array.Sort(listeCases, (a, b) => string.CompareOrdinal(a.name, b.name));
@@ -43,7 +44,9 @@ public class PlayerControls : MonoBehaviour
 
     private void OnDestroy()
     {
+        // désabonnement aux évènements
         Case.OnTileChoiceStart -= StartTileSelection;
+        Case.OnTileRedirect -= TileRedirect;
     }
 
     // Update is called once per frame
@@ -61,47 +64,32 @@ public class PlayerControls : MonoBehaviour
 
         if (allowTileChoice)
         {
-            foreach(KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
-            {
-                if (Input.GetKeyDown(key))
-                {
-                    if(key == gameSettings.Players[GameManager.playerTurn].Controls.Action)
-                    {
-                        //Debug.Log(gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
-                        gameSettings.Players[GameManager.playerTurn].CurrentPos = gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase - 1;
-                        gameManager.popupTileChoice.SetActive(false);
-
-                        //allowTileChoice = false;
-                        //allowMove = true;
-                    }
-                    else
-                    {
-                        Array.Reverse(gameManager.tileChoice);
-                        for(int i = 0; i < gameManager.tileChoiceiIndocators.Length; i++)
-                        {
-                            gameManager.tileChoiceiIndocators[i].transform.position = gameManager.tileChoice[i].transform.position + new Vector3(0, 10);
-                        }
-                    }
-                }
-            }
+            ChooseTile();
         }
     }
 
 
 
+    /// <summary>
+    /// Obtient un nombre aléatoire de mouvements restants entre 0 et 7 inclus.
+    /// </summary>
     void GetMovesLeft()
     {
-        movesLeft = Random.Range(0, 7);
+        movesLeft = Random.Range(0, 8);
         //Debug.Log("starting moves left: " + movesLeft);
 
         allowMove = true;
         allowInput = false;
     }
 
+    /// <summary>
+    /// Déplace le joueur en fonction des mouvements restants.
+    /// </summary>
     void MovePlayer()
     {
         if (movesLeft > 0)
         {
+            // calcul de la destiination et la distance tant qu'il reste des mouvements
             if (targetPos == Vector3.zero)
             {
                 targetPos = listeCases[gameSettings.Players[GameManager.playerTurn].CurrentPos + 1].transform.position + playerPosAjust;
@@ -110,34 +98,101 @@ public class PlayerControls : MonoBehaviour
 
             if (distance > 0)
             {
+                // tant que la destination n'est pas atteinte, le joueur continue de se déplacer
                 playerObjects[GameManager.playerTurn].transform.position = Vector3.MoveTowards(playerObjects[GameManager.playerTurn].transform.position, targetPos, .1f);
             }
             else
             {
+                // sinon, les mouvements restants sont décrémentés et la position actuelle du joueur est mise à jour
                 gameSettings.Players[GameManager.playerTurn].CurrentPos++;
-                //Debug.Log($"new CurrentPos: {gameSettings.Players[GameManager.playerTurn].CurrentPos}    Vector3: {playerObjects[GameManager.playerTurn].transform.position}");s
+                Debug.Log($"new CurrentPos: {gameSettings.Players[GameManager.playerTurn].CurrentPos}    Vector3: {playerObjects[GameManager.playerTurn].transform.position}");
                 movesLeft--;
                 //Debug.Log("current moves left: " + movesLeft);
-                targetPos = Vector3.zero;
+
+                if(plannedRedirect != Vector3.zero)
+                {
+                    targetPos = plannedRedirect;
+                    plannedRedirect = Vector3.zero;
+                }
+                else
+                {
+                    targetPos = Vector3.zero;
+                }
             }
         }
         else
         {
-            //OnTurnEnd.Invoke();
+            OnTurnEnd.Invoke();
 
             allowMove = false;
             allowInput = true;
         }
     }
 
+    /// <summary>
+    /// Commence la sélection de la case parmi les options données.
+    /// </summary>
+    /// <param name="options">Les options parmi lesquelles choisir</param>
+    /// <remarks>Cette méthode attend un évènement <see cref="Case.OnTileChoiceStart"/>.</remarks>
     void StartTileSelection(Transform[] options)
     {
-        foreach(Transform option in options)
-        {
-            Debug.Log($"pos {option.name}: {option.position}");
-        }
+        //foreach(Transform option in options)
+        //{
+        //    Debug.Log($"pos {option.name}: {option.position}");
+        //}
 
         allowMove = false;
         allowTileChoice = true;
+    }
+
+    /// <summary>
+    /// Permet au joueur de choisir une case parmi les options disponibles.
+    /// </summary>
+    void ChooseTile()
+    {
+        foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
+        {
+            if (Input.GetKeyDown(key))
+            {
+                if (key == gameSettings.Players[GameManager.playerTurn].Controls.Action)
+                {
+                    // confirme le choix de case avec le bouton d'action
+                    //Debug.Log(gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
+                    gameSettings.Players[GameManager.playerTurn].CurrentPos = gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase - 1;
+                    targetPos = gameManager.tileChoice[0].transform.position + playerPosAjust;
+                    gameManager.popupTileChoice.SetActive(false);
+                    foreach (GameObject obj in gameManager.tileChoiceiIndocators)
+                    {
+                        obj.SetActive(false);
+                    }
+
+                    OnTileChoiceEnd.Invoke();
+
+                    allowTileChoice = false;
+                    allowMove = true;
+                }
+                else
+                {
+                    // change la sélecton avec les autres boutons
+                    Array.Reverse(gameManager.tileChoice);
+                    for (int i = 0; i < gameManager.tileChoiceiIndocators.Length; i++)
+                    {
+                        gameManager.tileChoiceiIndocators[i].transform.position = gameManager.tileChoice[i].transform.position + new Vector3(0, 10);
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Stock la position de redirection de la case.
+    /// </summary>
+    /// <param name="redirect">Le transform contenant la position de redirection</param>
+    void TileRedirect(Transform redirect)
+    {
+        Debug.Log("planning redirect at: " + redirect);
+        plannedRedirect = redirect.position + playerPosAjust;
+        // -2 au lieu de -1 sinon ca saute une case... je sais pas pourquoi
+        gameSettings.Players[GameManager.playerTurn].CurrentPos = redirect.gameObject.GetComponent<Case>().indexCase - 2;
     }
 }

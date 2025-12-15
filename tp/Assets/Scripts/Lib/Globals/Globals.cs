@@ -3,6 +3,9 @@ using System;
 
 namespace Lib.Globals
 {
+    /// <summary>
+    /// Struct representant les controles d'un joueur.
+    /// </summary>
     [Serializable]
     public struct Controls
     {

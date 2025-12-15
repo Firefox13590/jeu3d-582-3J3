@@ -4,24 +4,32 @@ using UnityEngine;
 
 public class RegisterControlKey : MonoBehaviour
 {
+    [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameObject panelRegisterControlKey;
 
     bool isListeningKey = false;
     public TextMeshProUGUI textControle;
     public KeyCode registeredKey = KeyCode.None;
 
+    // événements publiques statiques
     public static event Action<int, string, KeyCode> OnControlKeyRegistered;
     void Awake()
     {
         textControle = GetComponentInChildren<TextMeshProUGUI>();
     }
 
+    /// <summary>
+    /// Affiche le panneau d'enregistrement de la touche de contrôle.
+    /// </summary>
     public void DisplayPanel()
     {
         panelRegisterControlKey.SetActive(true);
         isListeningKey = true;
     }
 
+    /// <summary>
+    /// Utilise la méthode <see cref="OnGUI"/> pour détecter les entrées clavier.
+    /// </summary>
     private void OnGUI()
     {
         Event e = Event.current;
@@ -31,20 +39,27 @@ public class RegisterControlKey : MonoBehaviour
             {
                 if(e.keyCode != KeyCode.Escape)
                 {
+                    // enregistrer la touche appuyée si ce n'est pas Echap
                     textControle.text = e.keyCode.ToString();
                     registeredKey = e.keyCode;
                 }
+                // sortie du mode écoute
                 //Debug.Log("Detected key code: " + e.keyCode);
                 isListeningKey = false;
                 panelRegisterControlKey.SetActive(false);
 
-                // decomposer le return tuple pour invoquer event
+                // décomposer le tuple pour obtenir les paramètres manquants
                 var (indexPlayer, nomControle) = GetMissingEventParameters();
                 OnControlKeyRegistered?.Invoke(indexPlayer, nomControle, e.keyCode);
             }
         }
     }
 
+    /// <summary>
+    /// Récupère les paramètres manquants pour l'événement.
+    /// </summary>
+    /// 
+    /// <returns>Un tuple contenant l'index du joueur et le nom du contrôle.</returns>
     (int, string) GetMissingEventParameters()
     {
         int indexPlayer;
