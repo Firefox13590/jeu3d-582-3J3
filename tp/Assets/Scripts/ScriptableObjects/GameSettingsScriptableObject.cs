@@ -5,10 +5,11 @@ using Lib.Entities;
 [CreateAssetMenu(fileName = "GameSettingsScriptableObject", menuName = "Scriptable Objects/GameSettingsScriptableObject")]
 public class GameSettingsScriptableObject : ScriptableObject
 {
-    private Player player1 = new("Player1", new Controls(KeyCode.W, KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.LeftShift));
+    //private Player player1 = new("Player1", new Controls(KeyCode.W, KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.LeftShift));
     //private Player player2 = new("Player2", new Controls(KeyCode.I, KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.Space));
     //private Player player3 = new("Player3", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return));
     //private Player player4 = new("Player4", new Controls(KeyCode.Keypad8, KeyCode.Keypad6, KeyCode.Keypad2, KeyCode.Keypad4, KeyCode.Keypad5));
+    private Player player1 = new("Player1", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space));
     private Player player3 = new Bot();
     private Player player2 = new Bot();
     private Player player4 = new Bot();
@@ -27,10 +28,11 @@ public class GameSettingsScriptableObject : ScriptableObject
     /// </summary>
     public void SetBackDefaultPlayerSettings()
     {
-        player1 = new("Player1", new Controls(KeyCode.W, KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.LeftShift));
+        //player1 = new("Player1", new Controls(KeyCode.W, KeyCode.D, KeyCode.S, KeyCode.A, KeyCode.LeftShift));
         //player2 = new("Player2", new Controls(KeyCode.I, KeyCode.L, KeyCode.K, KeyCode.J, KeyCode.Space));
         //player3 = new("Player3", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return));
         //player4 = new("Player4", new Controls(KeyCode.Keypad8, KeyCode.Keypad6, KeyCode.Keypad2, KeyCode.Keypad4, KeyCode.Keypad5));
+        player1 = new("Player1", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space));
         player2 = new Bot();
         player3 = new Bot();
         player4 = new Bot();

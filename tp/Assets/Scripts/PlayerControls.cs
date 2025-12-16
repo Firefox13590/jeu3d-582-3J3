@@ -9,16 +9,17 @@ public class PlayerControls : MonoBehaviour
     public GameObject[] playerObjects = new GameObject[4];
     public Vector3 playerPosAjust = Vector3.zero;
     public GameManager gameManager;
+    public GameObject glow, conteneurCartes;
 
     [Header("Variables de test")]
     public int testCurrentPos = 0;
 
     [Header("Acces publique pour autres scripts")]
-    public Vector3 targetPos = Vector3.zero, plannedRedirect = Vector3.zero;
     public bool allowTileChoice = false;
+    public Vector3 targetPos = Vector3.zero, plannedRedirect = Vector3.zero;
 
     // variables privées
-    GameObject[] listeCases;
+    GameObject[] listeCases, listeCartes;
     int movesLeft;
     bool allowInput = true, allowMove = false; // gestion des permissions
 
@@ -33,7 +34,9 @@ public class PlayerControls : MonoBehaviour
         Case.OnTileRedirect += TileRedirect;
 
         listeCases = GameObject.FindGameObjectsWithTag("Case");
+        listeCartes = GameObject.FindGameObjectsWithTag("Carte");
         Array.Sort(listeCases, (a, b) => string.CompareOrdinal(a.name, b.name));
+        Array.Sort(listeCartes, (a, b) => string.CompareOrdinal(a.name, b.name));
 
         for(int i = 0; i < playerObjects.Length; i++)
         {

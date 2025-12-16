@@ -60,5 +60,6 @@ public class GameManager : MonoBehaviour
     void UpdatePlayerTurn()
     {
         playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, 4);
+        Debug.Log(gameSettings.Players[playerTurn].GetType());
     }
 }

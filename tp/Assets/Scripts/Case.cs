@@ -11,7 +11,7 @@ public class Case : MonoBehaviour
     [Header("Acces publique pour autres scripts")]
     public int indexCase;
 
-    // événements statiques
+    // événements publiques statiques
     public static event Action<Transform[]> OnTileChoiceStart;
     public static event Action<Transform> OnTileRedirect;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
