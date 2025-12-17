@@ -9,7 +9,7 @@ public class PlayerControls : MonoBehaviour
     public GameObject[] playerObjects = new GameObject[4];
     public Vector3 playerPosAjust = Vector3.zero;
     public GameManager gameManager;
-    public GameObject glow, conteneurCartes;
+    public CardManager cardManager;
 
     [Header("Variables de test")]
     public int testCurrentPos = 0;
@@ -19,11 +19,11 @@ public class PlayerControls : MonoBehaviour
     public Vector3 targetPos = Vector3.zero, plannedRedirect = Vector3.zero;
 
     // variables privées
-    GameObject[] listeCases, listeCartes;
+    GameObject[] listeCases;
     int movesLeft;
     bool allowInput = true, allowMove = false; // gestion des permissions
 
-    // événements statiques
+    // évènements statiques
     public static event Action OnTurnEnd;
     public static event Action OnTileChoiceEnd;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,15 +34,15 @@ public class PlayerControls : MonoBehaviour
         Case.OnTileRedirect += TileRedirect;
 
         listeCases = GameObject.FindGameObjectsWithTag("Case");
-        listeCartes = GameObject.FindGameObjectsWithTag("Carte");
         Array.Sort(listeCases, (a, b) => string.CompareOrdinal(a.name, b.name));
-        Array.Sort(listeCartes, (a, b) => string.CompareOrdinal(a.name, b.name));
 
         for(int i = 0; i < playerObjects.Length; i++)
         {
             gameSettings.Players[i].CurrentPos = testCurrentPos;
             playerObjects[i].transform.position = listeCases[gameSettings.Players[i].CurrentPos].transform.position + playerPosAjust;
         }
+
+        cardManager.gameObject.SetActive(true);
     }
 
     private void OnDestroy()
@@ -57,10 +57,11 @@ public class PlayerControls : MonoBehaviour
     {
         if (Input.GetKeyDown(gameSettings.Players[GameManager.playerTurn].Controls.Action) && allowInput)
         {
-            GetMovesLeft();
+            //GetMovesLeft();
+            cardManager.ChoisirCarte();
         }
 
-        if(allowMove)
+        if (allowMove)
         {
             MovePlayer();
         }
