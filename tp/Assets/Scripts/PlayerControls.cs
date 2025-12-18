@@ -11,6 +11,7 @@ public class PlayerControls : MonoBehaviour
     public Vector3 playerPosAjust = Vector3.zero;
     public GameManager gameManager;
     public CardManager cardManager;
+    public BotControls botControls;
 
     [Header("Variables de test")]
     public int testCurrentPos = 0;
