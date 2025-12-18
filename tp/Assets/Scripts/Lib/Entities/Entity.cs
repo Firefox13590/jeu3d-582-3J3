@@ -36,11 +36,11 @@ namespace Lib.Entities
 
         public Player() : base("Player")
         {
-            Controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return);
+            Controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space);
         }
         public Player(string name) : base(name)
         {
-            Controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return);
+            Controls = new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space);
         }
         public Player(Controls controls) : base("Player")
         {
@@ -52,9 +52,14 @@ namespace Lib.Entities
         }
     }
 
+    /// <summary>
+    /// Représente un bot.
+    /// </summary>
+    /// <remarks>Hérite de la classe <see cref="Player"/>.</remarks>
     [Serializable]
     public class Bot : Player
     {
         public Bot() : base("Bot") { }
+        public Bot(string name) : base(name) { }
     }
 }

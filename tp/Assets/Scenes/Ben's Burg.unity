@@ -7785,6 +7785,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d9bb2ccc979ade645a72f217c011d393, type: 2}
   - {fileID: 2100000, guid: 6de5845f0f41620409c94a0974e9ae7c, type: 2}
   - {fileID: 2100000, guid: e15828228c52f4343bdf580b461249ae, type: 2}
+  playerControls: {fileID: 2010926726}
   listeCartes: []
 --- !u!1 &1364414957
 GameObject:
@@ -12606,8 +12607,9 @@ MonoBehaviour:
   playerPosAjust: {x: 0, y: 1, z: 0}
   gameManager: {fileID: 25559777}
   cardManager: {fileID: 1360395951}
-  testCurrentPos: 30
+  testCurrentPos: 0
   allowTileChoice: 0
+  allowInput: 1
   targetPos: {x: 0, y: 0, z: 0}
   plannedRedirect: {x: 0, y: 0, z: 0}
 --- !u!1001 &2015512877

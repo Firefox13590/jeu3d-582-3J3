@@ -60,6 +60,6 @@ public class GameManager : MonoBehaviour
     void UpdatePlayerTurn()
     {
         playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, 4);
-        Debug.Log(gameSettings.Players[playerTurn].GetType());
+        //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
     }
 }

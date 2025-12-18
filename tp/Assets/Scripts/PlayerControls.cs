@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,13 +16,13 @@ public class PlayerControls : MonoBehaviour
     public int testCurrentPos = 0;
 
     [Header("Acces publique pour autres scripts")]
-    public bool allowTileChoice = false;
+    public bool allowTileChoice = false, allowInput = true;
     public Vector3 targetPos = Vector3.zero, plannedRedirect = Vector3.zero;
 
     // variables privées
     GameObject[] listeCases;
     int movesLeft;
-    bool allowInput = true, allowMove = false; // gestion des permissions
+    bool allowMove = false;
 
     // évènements statiques
     public static event Action OnTurnEnd;
@@ -55,10 +56,16 @@ public class PlayerControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(gameSettings.Players[GameManager.playerTurn].Controls.Action) && allowInput)
+        if (allowInput)
         {
-            //GetMovesLeft();
-            cardManager.ChoisirCarte();
+            SelectionCarte();
+
+            //if (Input.GetKeyDown(gameSettings.Players[GameManager.playerTurn].Controls.Action))
+            //{
+            //    allowInput = false;
+
+            //    cardManager.ChoisirCarte();
+            //}
         }
 
         if (allowMove)
@@ -75,15 +82,17 @@ public class PlayerControls : MonoBehaviour
 
 
     /// <summary>
-    /// Obtient un nombre aléatoire de mouvements restants entre 0 et 7 inclus.
+    /// Obtient un nombre aléatoire de mouvements restants de 0 à 7.
     /// </summary>
-    void GetMovesLeft()
+    public void GetMovesLeft(int number)
     {
-        movesLeft = Random.Range(0, 8);
-        //Debug.Log("starting moves left: " + movesLeft);
+        movesLeft = number;
+        //Debug.Log("starting moves: " + movesLeft);
 
         allowMove = true;
-        allowInput = false;
+        //allowInput = false;
+
+        cardManager.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -109,7 +118,7 @@ public class PlayerControls : MonoBehaviour
             {
                 // sinon, les mouvements restants sont décrémentés et la position actuelle du joueur est mise à jour
                 gameSettings.Players[GameManager.playerTurn].CurrentPos++;
-                Debug.Log($"new CurrentPos: {gameSettings.Players[GameManager.playerTurn].CurrentPos}    Vector3: {playerObjects[GameManager.playerTurn].transform.position}");
+                //Debug.Log($"new CurrentPos: {gameSettings.Players[GameManager.playerTurn].CurrentPos}    Vector3: {playerObjects[GameManager.playerTurn].transform.position}");
                 movesLeft--;
                 //Debug.Log("current moves left: " + movesLeft);
 
@@ -130,6 +139,8 @@ public class PlayerControls : MonoBehaviour
 
             allowMove = false;
             allowInput = true;
+
+            cardManager.gameObject.SetActive(true);
         }
     }
 
@@ -198,5 +209,43 @@ public class PlayerControls : MonoBehaviour
         plannedRedirect = redirect.position + playerPosAjust;
         // -2 au lieu de -1 sinon ca saute une case... je sais pas pourquoi
         gameSettings.Players[GameManager.playerTurn].CurrentPos = redirect.gameObject.GetComponent<Case>().indexCase - 2;
+    }
+
+    /// <summary>
+    /// Contrôle la sélection de carte par le joueur.
+    /// </summary>
+    void SelectionCarte()
+    {
+        foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
+        {
+            if (Input.GetKeyDown(key))
+            {
+                // change la sélection de carte avec les boutons de mouvement
+                if (key == gameSettings.Players[GameManager.playerTurn].Controls.Up)
+                {
+                    cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint), true);
+                }
+                else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Down)
+                {
+                    cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint));
+
+                }
+                else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Right)
+                {
+                    cardManager.BougerSelecteurCarte(1);
+                }
+                else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Left)
+                {
+                    cardManager.BougerSelecteurCarte(1, true);
+                }
+                else 
+                {
+                    // confrme la sélection avec le bouton d'action
+                    allowInput = false;
+
+                    cardManager.ChoisirCarte();
+                }
+            }
+        }
     }
 }

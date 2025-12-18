@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Lib;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static Lib.ArrayMovement;
+using static Lib.ArrayMovement.ComparaisonType;
 using Random = UnityEngine.Random;
 
 public class CardManager : MonoBehaviour
@@ -10,12 +12,13 @@ public class CardManager : MonoBehaviour
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameObject glow, cartePrefab;
     public Material[] matCartes = new Material[8];
+    public PlayerControls playerControls;
 
     [Header("Acces publique pour autres scripts")]
     public List<GameObject> listeCartes;
+    public float halfPoint;
 
     // variables privées
-    float halfPoint;
     int glowPos = 0;
     // Use this for initialization
     void Start()
@@ -29,6 +32,9 @@ public class CardManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// Remplit le paquet de cartes
+    /// </summary>
     void RemplirListeCartes()
     {
         for(int i = 0; i < 10; i++)
@@ -50,6 +56,9 @@ public class CardManager : MonoBehaviour
         PositionnerCartes();
     }
 
+    /// <summary>
+    /// Positionne les cartes à l'écran. Varie selon le nombre de cartes restantes.
+    /// </summary>
     void PositionnerCartes()
     {
         halfPoint = listeCartes.Count / 2f;
@@ -65,6 +74,7 @@ public class CardManager : MonoBehaviour
             //Debug.Log("float halfPoint: " + halfPoint);
             //Debug.Log("int halfPoint: " + (int)Math.Ceiling(halfPoint));
 
+            // détermination de la rangée
             if (i < Math.Ceiling(halfPoint))
             {
                 // rangée du haut
@@ -79,6 +89,8 @@ public class CardManager : MonoBehaviour
                 //Debug.Log($"rangee bas: {i}    ajustedIndex: {ajustedIndex}");
                 nbCartesRangee = (int)Math.Floor(halfPoint);
             }
+
+            // ajuste le postonnement et l'espace entre les cartes selon de nombre de cartes dans la rangée
             switch (nbCartesRangee)
             {
                 case 5:
@@ -106,19 +118,39 @@ public class CardManager : MonoBehaviour
             listeCartes[i].GetComponent<RectTransform>().anchoredPosition = new Vector2
                 ((-600 + ajustedX) + ajustedIndex * (width + gap)/* - 600*/,
                 200 - 400 * row);
-            Debug.Log($"new vector2 for {listeCartes[i].name}: {listeCartes[i].GetComponent<RectTransform>().anchoredPosition}");
+            //Debug.Log($"new vector2 for {listeCartes[i].name}: {listeCartes[i].GetComponent<RectTransform>().anchoredPosition}");
         }
 
+        // remet l'indice de sélection à la première carte
         glow.GetComponent<RectTransform>().anchoredPosition = listeCartes[glowPos].GetComponent<RectTransform>().anchoredPosition;
     }
 
+    /// <summary>
+    /// Tourne la carte sélectonnée afin d'affcher sa valeur.
+    /// </summary>
     public void ChoisirCarte()
     {
+        //Debug.Log("avant Rotate(): " + listeCartes[glowPos].GetComponent<RectTransform>().rotation);
+        listeCartes[glowPos].GetComponent<RectTransform>().Rotate(0, 180, 0);
+        //Debug.Log("apres Rotate(): " + listeCartes[glowPos].GetComponent<RectTransform>().rotation);
+
+        Invoke(nameof(GiveMovesLeft), 1);
+    }
+
+    /// <summary>
+    /// Donne la valeur de déplacement de la carte sélectionnée au joueur.
+    /// </summary>
+    void GiveMovesLeft()
+    {
+        //Debug.Log(listeCartes[glowPos].GetComponent<Image>().material.name[4]);
+        //Debug.Log(Char.GetNumericValue(listeCartes[glowPos].GetComponent<Image>().material.name[4]));
+        playerControls.GetMovesLeft((int) Char.GetNumericValue(listeCartes[glowPos].GetComponent<Image>().material.name[4]));
+
         Destroy(listeCartes[glowPos]);
         listeCartes.RemoveAt(glowPos);
         //Debug.Log(listeCartes.Count);
 
-        if(listeCartes.Count == 0)
+        if (listeCartes.Count == 0)
         {
             RemplirListeCartes();
         }
@@ -126,5 +158,24 @@ public class CardManager : MonoBehaviour
         {
             PositionnerCartes();
         }
+    }
+
+    /// <summary>
+    /// Gère le mouvement de l'indice de sélection de carte.
+    /// </summary>
+    /// <param name="move">La quantité de positions du déplacement</param>
+    /// <param name="isReverse">Le sens du déplacement (vers le max ou le min).</param>
+    public void BougerSelecteurCarte(int move, bool isReverse = false)
+    {
+        ComparaisonType comparaison = ComparaisonType.GreaterThan;
+        if (isReverse)
+        {
+            comparaison = (ComparaisonType)(-(int)comparaison);
+        }
+
+        //Debug.Log("glow pos avant: " + glowPos);
+        glowPos = ArrayMovement.CheckForLoopback(glowPos, listeCartes.Count - 1, move, comparaison: comparaison, reverse: isReverse);
+        glow.GetComponent<RectTransform>().anchoredPosition = listeCartes[glowPos].GetComponent<RectTransform>().anchoredPosition;
+        //Debug.Log("glow pos apres: " + glowPos);
     }
 }

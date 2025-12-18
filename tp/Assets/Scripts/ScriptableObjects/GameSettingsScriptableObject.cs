@@ -10,9 +10,9 @@ public class GameSettingsScriptableObject : ScriptableObject
     //private Player player3 = new("Player3", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return));
     //private Player player4 = new("Player4", new Controls(KeyCode.Keypad8, KeyCode.Keypad6, KeyCode.Keypad2, KeyCode.Keypad4, KeyCode.Keypad5));
     private Player player1 = new("Player1", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space));
-    private Player player3 = new Bot();
-    private Player player2 = new Bot();
-    private Player player4 = new Bot();
+    private Player player3 = new Bot("Bot1");
+    private Player player2 = new Bot("Bot2");
+    private Player player4 = new Bot("Bot3");
 
     //private Player[] players;
     public Player[] Players
@@ -33,8 +33,8 @@ public class GameSettingsScriptableObject : ScriptableObject
         //player3 = new("Player3", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Return));
         //player4 = new("Player4", new Controls(KeyCode.Keypad8, KeyCode.Keypad6, KeyCode.Keypad2, KeyCode.Keypad4, KeyCode.Keypad5));
         player1 = new("Player1", new Controls(KeyCode.UpArrow, KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.Space));
-        player2 = new Bot();
-        player3 = new Bot();
-        player4 = new Bot();
+        player2 = new Bot("Bot1");
+        player3 = new Bot("Bot2");
+        player4 = new Bot("Bot3");
     }
 }
