@@ -14,6 +14,7 @@ public class Case : MonoBehaviour
     // événements publiques statiques
     public static event Action<Transform[]> OnTileChoiceStart;
     public static event Action<Transform> OnTileRedirect;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,6 +24,7 @@ public class Case : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //Debug.Log("collision avec: " + other.name);
         if (choixChemin/* && other.gameObject.CompareTag("Player")*/)
         {
             OnTileChoiceStart.Invoke(optionsCase);

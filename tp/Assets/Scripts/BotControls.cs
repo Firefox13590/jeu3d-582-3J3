@@ -20,18 +20,24 @@ public class BotControls : MonoBehaviour
         playerControls = GetComponent<PlayerControls>();
     }
 
+    /// <summary>
+    /// Controle du bot pour choisir une carte.
+    /// </summary>
     public void SelectionCarte()
     {
         int cardChoice = Random.Range(0, cardManager.listeCartes.Count);
-        Debug.Log("bot card choice: " + cardChoice);
+        //Debug.Log("bot card choice: " + cardChoice);
         cardManager.ChoisirCarte(cardChoice);
     }
 
+    /// <summary>
+    /// Controle du bot pour choisir une case.
+    /// </summary>
     public void ChooseTile()
     {
         if (Convert.ToBoolean(Random.Range(0, 2)))
         {
-            Debug.Log("bot changed tile selection");
+            //Debug.Log("bot changed tile selection");
             gameManager.ChangeTileSelection();
         }
 

@@ -1,7 +1,6 @@
 ﻿using Lib;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static Lib.ArrayMovement;
@@ -20,6 +19,7 @@ public class CardManager : MonoBehaviour
 
     // variables privées
     int glowPos = 0;
+
     // Use this for initialization
     void Start()
     {

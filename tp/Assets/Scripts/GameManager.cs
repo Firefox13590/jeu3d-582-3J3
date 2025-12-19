@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using Lib;
+using TMPro;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,7 +11,8 @@ public class GameManager : MonoBehaviour
     public GameObject popupTileChoice;
     public GameSettingsScriptableObject gameSettings;
     public PlayerControls playerControls;
-    public GameObject[] tileChoiceiIndocators = new GameObject[2];
+    public GameObject[] tileChoiceiIndocators = new GameObject[2], playerStatsPanels = new GameObject[4];
+    public Material[] playerMaterials = new Material[4];
 
     [Header("Acces publique pour autres scripts")]
     public Transform[] tileChoice;
@@ -28,6 +32,9 @@ public class GameManager : MonoBehaviour
         Case.OnTileChoiceStart += DisplayTileChoice;
         PlayerControls.OnTurnEnd += UpdatePlayerTurn;
         PlayerControls.OnTileChoiceEnd += HideTileChoice;
+
+        //Debug.Log(playerMaterials[0].color);
+        HighlightPlayerStatsPanel();
     }
 
     private void OnDestroy()
@@ -81,16 +88,45 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Change l'ordre du tour des joueurs.
+    /// Met à jour l'ordre du tour des joueurs.
     /// </summary>
+    /// <remarks>À chaque fois que <see cref="playerTurn"/> revient à 0, décrémente <see cref="turnsLeft"/></remarks>
     void UpdatePlayerTurn()
     {
+        AddCurrency();
+
         playerTurn = ArrayMovement.CheckForResetLoop(playerTurn + 1, gameSettings.Players.Length);
         //Debug.Log($"player type: {gameSettings.Players[playerTurn].GetType()}    player name: {gameSettings.Players[playerTurn].Name}");
+        HighlightPlayerStatsPanel();
 
         if(playerTurn == 0)
         {
             turnsLeft--;
         }
+    }
+
+    void HighlightPlayerStatsPanel()
+    {
+        for(int i = 0; i < playerStatsPanels.Length; i++)
+        {
+            if(i == playerTurn)
+            {
+                playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 350);
+                playerStatsPanels[i].GetComponentInChildren<Image>().color = playerMaterials[i].color;
+            }
+            else
+            {
+                playerStatsPanels[i].GetComponent<RectTransform>().sizeDelta = new Vector2(450, 300);
+                playerStatsPanels[i].GetComponentInChildren<Image>().color = new Color32(0, 0, 0, 100);
+            }
+        }
+    }
+
+    void AddCurrency()
+    {
+        //Debug.Log(playerStatsPanels[playerTurn].transform.childCount);
+        TextMeshProUGUI textCurrency = playerStatsPanels[playerTurn].transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        //Debug.Log(textCurrency.text);
+        textCurrency.text = "x  " + (int.Parse(textCurrency.text[3..]) + Random.Range(0, 8));
     }
 }

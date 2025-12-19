@@ -28,6 +28,7 @@ public class PlayerControls : MonoBehaviour
     // évènements statiques
     public static event Action OnTurnEnd;
     public static event Action OnTileChoiceEnd;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -170,7 +171,7 @@ public class PlayerControls : MonoBehaviour
     {
         if (gameSettings.Players[GameManager.playerTurn].GetType() == typeof(Bot))
         {
-            Debug.Log($"bot {gameSettings.Players[GameManager.playerTurn].Name} tile selection");
+            //Debug.Log($"bot {gameSettings.Players[GameManager.playerTurn].Name} tile selection");
             allowTileChoice = false;
             botControls.Invoke(nameof(botControls.ChooseTile), Random.Range(.25f, 1f));
 
@@ -198,6 +199,9 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Applique la sélection de case faite par le joueur.
+    /// </summary>
     public void TileSelected()
     {
         //Debug.Log(gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
@@ -216,7 +220,7 @@ public class PlayerControls : MonoBehaviour
     /// <param name="redirect">Le transform contenant la position de redirection</param>
     void TileRedirect(Transform redirect)
     {
-        Debug.Log("planning redirect at: " + redirect);
+        //Debug.Log("planning redirect at: " + redirect);
         plannedRedirect = redirect.position + playerPosAjust;
         // -2 au lieu de -1 sinon ca saute une case... je sais pas pourquoi
         gameSettings.Players[GameManager.playerTurn].CurrentPos = redirect.gameObject.GetComponent<Case>().indexCase - 2;
@@ -229,7 +233,7 @@ public class PlayerControls : MonoBehaviour
     {
         if (gameSettings.Players[GameManager.playerTurn].GetType() == typeof(Bot))
         {
-            Debug.Log($"bot {gameSettings.Players[GameManager.playerTurn].Name} card selection");
+            //Debug.Log($"bot {gameSettings.Players[GameManager.playerTurn].Name} card selection");
             allowInput = false;
             botControls.Invoke(nameof(botControls.SelectionCarte), Random.Range(0, 1f));
 

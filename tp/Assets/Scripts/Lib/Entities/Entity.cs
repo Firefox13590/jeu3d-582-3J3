@@ -32,7 +32,14 @@ namespace Lib.Entities
     [Serializable]
     public class Player : Entity
     {
+        private int currency = 0;
+
         public Controls Controls { get; set; }
+        public int Currency
+        {
+            get { return currency; }
+            set { currency = value; }
+        }
 
         public Player() : base("Player")
         {
