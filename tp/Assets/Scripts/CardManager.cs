@@ -1,17 +1,17 @@
 ﻿using Lib;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static Lib.ArrayMovement;
-using static Lib.ArrayMovement.ComparaisonType;
 using Random = UnityEngine.Random;
 
 public class CardManager : MonoBehaviour
 {
     [Header("Valeurs a ajuster dans l'inspecteur")]
-    public GameObject glow, cartePrefab;
     public Material[] matCartes = new Material[8];
+    public GameObject glow, cartePrefab;
     public PlayerControls playerControls;
 
     [Header("Acces publique pour autres scripts")]
@@ -135,6 +135,12 @@ public class CardManager : MonoBehaviour
         //Debug.Log("apres Rotate(): " + listeCartes[glowPos].GetComponent<RectTransform>().rotation);
 
         Invoke(nameof(GiveMovesLeft), 1);
+    }
+    public void ChoisirCarte(int pos)
+    {
+        glowPos = pos;
+        glow.GetComponent<RectTransform>().anchoredPosition = listeCartes[glowPos].GetComponent<RectTransform>().anchoredPosition;
+        ChoisirCarte();
     }
 
     /// <summary>

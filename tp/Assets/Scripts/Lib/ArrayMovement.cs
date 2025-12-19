@@ -27,7 +27,7 @@ namespace Lib
         /// <param name="comparaison">La règle de comparaison. <c>ComparaisonType.GreaterThanOrEqualTo</c> par défaut.</param>
         /// <param name="reverse">Détermine si la vérification doit être effectuée à l'envers (vérification contre min au lieu de max). <c>false</c> par défaut.</param>
         /// 
-        /// <returns><paramref name="value"/> si elle ne dépasse pas les limites <paramref name="max"/> ou <paramref name="min"/>, sinon retourne les limites.</returns>
+        /// <returns><paramref name="value"/> si elle ne dépasse pas l'une des limites <paramref name="max"/> ou <paramref name="min"/>, sinon retourne la limite apropriée.</returns>
         public static int CheckForResetLoop(int value, int max, int min = 0, ComparaisonType comparaison = ComparaisonType.GreaterThanOrEqualTo, bool reverse = false)
         {
             //Debug.Log($"value: {value}, max: {max}");

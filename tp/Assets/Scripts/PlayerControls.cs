@@ -1,5 +1,5 @@
+using Lib.Entities;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,7 +11,6 @@ public class PlayerControls : MonoBehaviour
     public Vector3 playerPosAjust = Vector3.zero;
     public GameManager gameManager;
     public CardManager cardManager;
-    public BotControls botControls;
 
     [Header("Variables de test")]
     public int testCurrentPos = 0;
@@ -24,6 +23,7 @@ public class PlayerControls : MonoBehaviour
     GameObject[] listeCases;
     int movesLeft;
     bool allowMove = false;
+    BotControls botControls;
 
     // évènements statiques
     public static event Action OnTurnEnd;
@@ -45,6 +45,8 @@ public class PlayerControls : MonoBehaviour
         }
 
         cardManager.gameObject.SetActive(true);
+
+        botControls = GetComponent<BotControls>();
     }
 
     private void OnDestroy()
@@ -166,38 +168,46 @@ public class PlayerControls : MonoBehaviour
     /// </summary>
     void ChooseTile()
     {
-        foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
+        if (gameSettings.Players[GameManager.playerTurn].GetType() == typeof(Bot))
         {
-            if (Input.GetKeyDown(key))
+            Debug.Log($"bot {gameSettings.Players[GameManager.playerTurn].Name} tile selection");
+            allowTileChoice = false;
+            botControls.Invoke(nameof(botControls.ChooseTile), Random.Range(.25f, 1f));
+
+            //return;
+        }
+        else
+        {
+            //Debug.Log("player tile selection");
+            foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
             {
-                if (key == gameSettings.Players[GameManager.playerTurn].Controls.Action)
+                if (Input.GetKeyDown(key))
                 {
-                    // confirme le choix de case avec le bouton d'action
-                    //Debug.Log(gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
-                    gameSettings.Players[GameManager.playerTurn].CurrentPos = gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase - 1;
-                    targetPos = gameManager.tileChoice[0].transform.position + playerPosAjust;
-                    gameManager.popupTileChoice.SetActive(false);
-                    foreach (GameObject obj in gameManager.tileChoiceiIndocators)
+                    if (key == gameSettings.Players[GameManager.playerTurn].Controls.Action)
                     {
-                        obj.SetActive(false);
+                        // confirme le choix de case avec le bouton d'action
+                        TileSelected();
                     }
-
-                    OnTileChoiceEnd.Invoke();
-
-                    allowTileChoice = false;
-                    allowMove = true;
-                }
-                else
-                {
-                    // change la sélecton avec les autres boutons
-                    Array.Reverse(gameManager.tileChoice);
-                    for (int i = 0; i < gameManager.tileChoiceiIndocators.Length; i++)
+                    else
                     {
-                        gameManager.tileChoiceiIndocators[i].transform.position = gameManager.tileChoice[i].transform.position + new Vector3(0, 10);
+                        // change la sélecton avec les autres boutons
+                        gameManager.ChangeTileSelection();
                     }
                 }
             }
         }
+    }
+
+    public void TileSelected()
+    {
+        //Debug.Log(gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase);
+        gameSettings.Players[GameManager.playerTurn].CurrentPos = gameManager.tileChoice[0].gameObject.GetComponent<Case>().indexCase - 1;
+        targetPos = gameManager.tileChoice[0].transform.position + playerPosAjust;
+
+        OnTileChoiceEnd.Invoke();
+
+        allowTileChoice = false;
+        allowMove = true;
     }
 
     /// <summary>
@@ -217,34 +227,46 @@ public class PlayerControls : MonoBehaviour
     /// </summary>
     void SelectionCarte()
     {
-        foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
+        if (gameSettings.Players[GameManager.playerTurn].GetType() == typeof(Bot))
         {
-            if (Input.GetKeyDown(key))
+            Debug.Log($"bot {gameSettings.Players[GameManager.playerTurn].Name} card selection");
+            allowInput = false;
+            botControls.Invoke(nameof(botControls.SelectionCarte), Random.Range(0, 1f));
+
+            //return;
+        }
+        else
+        {
+            //Debug.Log("player card selection");
+            foreach (KeyCode key in gameSettings.Players[GameManager.playerTurn].Controls.AllControls)
             {
-                // change la sélection de carte avec les boutons de mouvement
-                if (key == gameSettings.Players[GameManager.playerTurn].Controls.Up)
+                if (Input.GetKeyDown(key))
                 {
-                    cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint), true);
-                }
-                else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Down)
-                {
-                    cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint));
+                    // change la sélection de carte avec les boutons de mouvement
+                    if (key == gameSettings.Players[GameManager.playerTurn].Controls.Up)
+                    {
+                        cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint), true);
+                    }
+                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Down)
+                    {
+                        cardManager.BougerSelecteurCarte((int)Math.Ceiling(cardManager.halfPoint));
 
-                }
-                else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Right)
-                {
-                    cardManager.BougerSelecteurCarte(1);
-                }
-                else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Left)
-                {
-                    cardManager.BougerSelecteurCarte(1, true);
-                }
-                else 
-                {
-                    // confrme la sélection avec le bouton d'action
-                    allowInput = false;
+                    }
+                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Right)
+                    {
+                        cardManager.BougerSelecteurCarte(1);
+                    }
+                    else if (key == gameSettings.Players[GameManager.playerTurn].Controls.Left)
+                    {
+                        cardManager.BougerSelecteurCarte(1, true);
+                    }
+                    else
+                    {
+                        // confrme la sélection avec le bouton d'action
+                        allowInput = false;
 
-                    cardManager.ChoisirCarte();
+                        cardManager.ChoisirCarte();
+                    }
                 }
             }
         }
