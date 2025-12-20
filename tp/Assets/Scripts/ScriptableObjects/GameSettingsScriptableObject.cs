@@ -37,4 +37,16 @@ public class GameSettingsScriptableObject : ScriptableObject
         player3 = new Bot("Bot2");
         player4 = new Bot("Bot3");
     }
+
+    /// <summary>
+    /// Réinitialise les statistiques de jeu de tous les joueurs.
+    /// </summary>
+    public void ResetPlayerGameStats()
+    {
+        foreach (Player player in Players)
+        {
+            player.CurrentPos = 0;
+            player.Currency = 0;
+        }
+    }
 }

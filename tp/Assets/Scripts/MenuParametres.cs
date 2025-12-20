@@ -9,7 +9,9 @@ public class MenuParametres : MonoBehaviour
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameSettingsScriptableObject gameSettings;
 
+    // variables privées
     GameObject[] conteneursControlesPlayer;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,18 +40,25 @@ public class MenuParametres : MonoBehaviour
         Debug.Log($"Event output (int, string, KeyCode): {indexPlayer}    {nomControle}    {key}");
 
         // Utilisation de la réflexion pour accéder dynamiquement à la propriété du contrôle
-        Type typePlayer = typeof(Controls);
-        PropertyInfo propinfoControle = typePlayer.GetProperty(nomControle);
-        Debug.Log($"Type: {typePlayer}    PropertyInfo: {propinfoControle.Name}");
+        Type typeControle = typeof(Controls);
+        PropertyInfo propinfoControle = typeControle.GetProperty(nomControle);
+        Debug.Log("property info: " + propinfoControle);
+        Debug.Log($"Type: {typeControle}    PropertyInfo: {propinfoControle.Name}");
         if (propinfoControle != null )
         {
-            propinfoControle.SetValue(gameSettings.Players[indexPlayer].Controls, key);
+            //propinfoControle.SetValue(gameSettings.Players[indexPlayer].Controls, key);
+            object obj = gameSettings.Players[indexPlayer].Controls;
+            propinfoControle.SetValue(obj, key);
+            gameSettings.Players[indexPlayer].Controls = (Controls)obj;
+
             Debug.Log(propinfoControle.GetValue(gameSettings.Players[indexPlayer].Controls));
         }
         else
         {
             Debug.LogError("Cant set property value");
         }
+
+        Debug.Log(gameSettings.Players[0].Controls);
     }
 
     /// <summary>

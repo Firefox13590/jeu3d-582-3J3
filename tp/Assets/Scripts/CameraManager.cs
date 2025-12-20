@@ -5,6 +5,7 @@ public class CameraManager : MonoBehaviour
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameObject[] Cameras;
     public int setCameraiIndex;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

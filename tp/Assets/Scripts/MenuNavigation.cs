@@ -8,6 +8,7 @@ public class MenuNavigation : MonoBehaviour
     [Range(0, 2)]
     public int menuCible = 1;
 
+    // variables privées
     RectTransform rtrCanvas;
     int menuActuel = 1;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

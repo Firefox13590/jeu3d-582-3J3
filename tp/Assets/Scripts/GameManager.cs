@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Lib;
 using TMPro;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public PlayerControls playerControls;
     public GameObject[] tileChoiceiIndocators = new GameObject[2], playerStatsPanels = new GameObject[4];
     public Material[] playerMaterials = new Material[4];
+    public TextMeshProUGUI texteToursRestants;
 
     [Header("Acces publique pour autres scripts")]
     public Transform[] tileChoice;
@@ -23,7 +25,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        gameSettings.SetBackDefaultPlayerSettings();
+        //gameSettings.SetBackDefaultPlayerSettings();
+        gameSettings.ResetPlayerGameStats();
     }
 
     private void Start()
@@ -35,6 +38,8 @@ public class GameManager : MonoBehaviour
 
         //Debug.Log(playerMaterials[0].color);
         HighlightPlayerStatsPanel();
+
+        texteToursRestants.text = "Tours restants: " + turnsLeft;
     }
 
     private void OnDestroy()
@@ -90,7 +95,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Met à jour l'ordre du tour des joueurs.
     /// </summary>
-    /// <remarks>À chaque fois que <see cref="playerTurn"/> revient à 0, décrémente <see cref="turnsLeft"/></remarks>
+    /// <remarks>À chaque fois que <see cref="playerTurn"/> revient à 0, décrémente <see cref="turnsLeft"/>.</remarks>
     void UpdatePlayerTurn()
     {
         AddCurrency();
@@ -101,10 +106,27 @@ public class GameManager : MonoBehaviour
 
         if(playerTurn == 0)
         {
-            turnsLeft--;
+            UpdateGameTurn();
         }
     }
 
+    /// <summary>
+    /// Met à jour le nombre de tours restants.
+    /// </summary>
+    void UpdateGameTurn()
+    {
+        turnsLeft--;
+        texteToursRestants.text = "Tours restants: " + turnsLeft;
+
+        if(turnsLeft == 0)
+        {
+            SceneManager.LoadScene(2);
+        }
+    }
+
+    /// <summary>
+    /// Met en évidence le panneau de statistiques du joueur dont c'est le tour actuel.
+    /// </summary>
     void HighlightPlayerStatsPanel()
     {
         for(int i = 0; i < playerStatsPanels.Length; i++)
@@ -122,11 +144,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Incrémente la "monnaie" du joueur actuel.
+    /// </summary>
     void AddCurrency()
     {
         //Debug.Log(playerStatsPanels[playerTurn].transform.childCount);
         TextMeshProUGUI textCurrency = playerStatsPanels[playerTurn].transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         //Debug.Log(textCurrency.text);
-        textCurrency.text = "x  " + (int.Parse(textCurrency.text[3..]) + Random.Range(0, 8));
+
+        gameSettings.Players[playerTurn].Currency += Random.Range(2, 8);
+        //Debug.Log("score de " + gameSettings.Players[playerTurn].Name + ": " + score);
+        Fin.scoreJoueurs[playerTurn] = gameSettings.Players[playerTurn].Currency;
+        textCurrency.text = "x  " + gameSettings.Players[playerTurn].Currency;
     }
 }

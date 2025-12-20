@@ -20,6 +20,9 @@ public class CardManager : MonoBehaviour
     // variables privées
     int glowPos = 0;
 
+    // évènements publiques statiques
+    public static event Action OnCardSelect;
+
     // Use this for initialization
     void Start()
     {
@@ -133,6 +136,8 @@ public class CardManager : MonoBehaviour
         //Debug.Log("avant Rotate(): " + listeCartes[glowPos].GetComponent<RectTransform>().rotation);
         listeCartes[glowPos].GetComponent<RectTransform>().Rotate(0, 180, 0);
         //Debug.Log("apres Rotate(): " + listeCartes[glowPos].GetComponent<RectTransform>().rotation);
+
+        OnCardSelect.Invoke();
 
         Invoke(nameof(GiveMovesLeft), 1);
     }

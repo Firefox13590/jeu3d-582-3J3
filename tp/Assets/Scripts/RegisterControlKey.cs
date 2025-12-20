@@ -7,6 +7,7 @@ public class RegisterControlKey : MonoBehaviour
     [Header("Valeurs a ajuster dans l'inspecteur")]
     public GameObject panelRegisterControlKey;
 
+    // variables privées
     bool isListeningKey = false;
     public TextMeshProUGUI textControle;
     public KeyCode registeredKey = KeyCode.None;

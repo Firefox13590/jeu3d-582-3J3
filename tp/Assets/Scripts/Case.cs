@@ -24,6 +24,7 @@ public class Case : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // lance des évènements selon certianes conditions
         //Debug.Log("collision avec: " + other.name);
         if (choixChemin/* && other.gameObject.CompareTag("Player")*/)
         {
